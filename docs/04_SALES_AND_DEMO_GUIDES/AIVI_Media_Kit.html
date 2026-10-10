@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIVI – AI Career Intelligence OS | Media Kit</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #0ea5e9;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --bg-body: #f1f5f9;
+            --bg-page: #ffffff;
+            --bg-subtle: #f8fafc;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            background-color: var(--bg-body);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Page Layout Settings */
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 15mm auto;
+            background: var(--bg-page);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            padding: 25mm 20mm 20mm 20mm;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            page-break-after: always;
+        }
+
+        @media print {
+            body {
+                background: none;
+                margin: 0;
+            }
+
+            .page {
+                margin: 0;
+                box-shadow: none;
+                width: 210mm;
+                height: 297mm;
+                padding: 15mm;
+                page-break-after: always;
+            }
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3,
+        h4 {
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            color: var(--text-main);
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 40px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: var(--text-main);
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        p {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        ul {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        strong {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* Utility Classes */
+        .content {
+            flex: 1;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .box {
+            background: var(--bg-subtle);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+
+        .highlight-quote {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.5rem;
+            background: #eff6ff;
+            border-radius: 0 8px 8px 0;
+            margin: 2rem 0;
+        }
+
+        .placeholder {
+            background: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-weight: 500;
+            min-height: 220px;
+            width: 100%;
+            margin: 2rem 0;
+            font-size: 0.95rem;
+        }
+
+        /* Cover Page Specific */
+        .page-cover {
+            background: linear-gradient(135deg, #020617 0%, #1e1b4b 100%);
+            color: white;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40mm;
+        }
+
+        .page-cover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .cover-logo {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .cover-logo span {
+            color: #3b82f6;
+        }
+
+        .cover-title {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .cover-tagline {
+            font-size: 1.5rem;
+            color: #93c5fd;
+            font-weight: 400;
+            margin-bottom: 2.5rem;
+        }
+
+        .cover-badge {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: inline-block;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+        }
+
+        .cover-website {
+            position: absolute;
+            bottom: 25mm;
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Modules Grid (Solution) */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .module-item {
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .module-item h4 {
+            color: var(--primary-dark);
+            margin-bottom: 0.3rem;
+            font-size: 1.15rem;
+        }
+
+        .module-item p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            color: var(--text-muted);
+        }
+
+        /* Footer / Pagination */
+        .page-footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border);
+            padding-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        body {
+            counter-reset: page;
+        }
+
+        .page:not(.page-cover) {
+            counter-increment: page;
+        }
+
+        .page-num::after {
+            content: counter(page);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- PAGE 1: COVER -->
+    <div class="page page-cover">
+        <div class="cover-logo">
+            AI<span>VI</span>
+        </div>
+        <div class="cover-title">AIVI</div>
+        <div class="cover-tagline">Resume + LinkedIn Intelligence Powered by AI</div>
+
+        <div style="margin-top: 2rem;">
+            <div class="cover-badge">Free Beta for First 1,000 Users</div>
+        </div>
+
+        <a href="https://aivisibilityinsights.com" class="cover-website">aivisibilityinsights.com</a>
+    </div>
+
+    <!-- PAGE 2: ABOUT AIVI -->
+    <div class="page">
+        <div class="content">
+            <h2>About AIVI</h2>
+
+            <div class="highlight-quote">
+                AIVI is not a resume builder. It is a Career Intelligence System.
+            </div>
+
+            <h3 style="margin-top: 3rem;">What is AIVI?</h3>
+            <p>AIVI is an advanced AI-powered career intelligence operating system designed to give professionals
+                absolute clarity and control over their career trajectory. By unifying resume optimization, LinkedIn
+                analytics, and job fit analysis into a single platform, AIVI transforms the historically opaque job
+                search process into a structured, data-driven methodology.</p>
+
+            <h3 style="margin-top: 2rem;">Why it was built</h3>
+            <p>The modern job market is driven by algorithms. Applicant Tracking Systems (ATS) and recruiter search
+                queries filter out highly qualified candidates simply because their career narratives lack the right
+                structure and semantics. AIVI was built to level the playing field, giving candidates the same degree of
+                algorithmic intelligence that recruiters have been using for years.</p>
+
+            <h3 style="margin-top: 2rem;">The Problem it Solves</h3>
+            <p>We eliminate "the black hole" of job applications. Professionals spend hours applying to jobs only to
+                receive generic rejections without actionable feedback. AIVI solves this by acting as a proactive career
+                copilot—analyzing gaps, scoring visibility, and delivering precise, actionable roadmaps to optimize
+                professional presence.</p>
+        </div>
+
+        <div class="page-footer">
+            <span>AIVI – Media Kit</span>
+            <span>Page <span class="page-num"></span></span>
+        </div>
+    </div>
+
+    <!-- PAGE 3: THE PROBLEM -->
+    <div class="page">
+        <div class="content">
+            <h2>The Problem</h2>
+            <p style="font-size: 1.15rem; color: var(--text-main); margin-bottom: 2.5rem;">The traditional job search is
+                broken. Highly skilled professionals struggle to advance because of systemic inefficiencies in how
+                talent is evaluated. This leads to profound frustration and stalled careers.</p>
+
+            <div class="grid-2">
+                <div class="box">
+                    <h3>Rejection Without Context</h3>
+                    <p style="margin-bottom: 0;">People don’t know why their resumes get rejected. Applications
+                        disappear into an ATS void, providing zero feedback on whether the issue was skills, formatting,
+                        or keyword gaps.</p>
+                </div>
+                <div class="box">
+                    <h3>Hidden LinkedIn Visibility</h3>
+                    <p style="margin-bottom: 0;">LinkedIn visibility is entirely unclear to the average user.
+                        Professionals don't know how recruiters search for them, or why they aren't appearing in crucial
+                        talent searches.</p>
+                </div>
+                <div class="box" style="margin-top: 1rem;">
+                    <h3>Guesswork in Job Fit</h3>
+                    <p style="margin-bottom: 0;">Determining job fit is largely guesswork. Candidates spend hours
+                        tailoring applications for roles where they may have critical, unseen gaps that instantly
+                        disqualify them.</p>
+                </div>
+                <div class="box" style="margin-top: 1rem;">
+                    <h3>Lack of Structured Feedback</h3>
+                    <p style="margin-bottom: 0;">Career growth lacks structured feedback. Beyond an annual performance
+                        review, professionals have no continuous, objective intelligence on their market value or
+                        promotion readiness.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>AIVI – Media Kit</span>
+            <span>Page <span class="page-num"></span></span>
+        </div>
+    </div>
+
+    <!-- PAGE 4: THE SOLUTION -->
+    <div class="page">
+        <div class="content">
+            <h2>The Solution</h2>
+            <p style="font-size: 1.1rem; color: var(--text-main);">AIVI provides an integrated suite of modules that
+                deliver end-to-end career intelligence. We break down the black box of hiring into clear, actionable
+                data.</p>
+
+            <div class="modules-grid">
+                <div class="module-item">
+                    <h4>Resume Intelligence</h4>
+                    <p>Deep-dive diagnostics into formatting, semantics, and ATS compatibility.</p>
+                </div>
+                <div class="module-item">
+                    <h4>LinkedIn Analyzer</h4>
+                    <p>Visibility scoring and algorithmic optimization for your professional profile.</p>
+                </div>
+                <div class="module-item">
+                    <h4>Resume Rebuild Engine</h4>
+                    <p>Context-aware, AI-driven rewriting to maximize impact and keyword density.</p>
+                </div>
+                <div class="module-item">
+                    <h4>Job Fit Analysis</h4>
+                    <p>Instant, accurate alignment scoring against specific target job descriptions.</p>
+                </div>
+                <div class="module-item">
+                    <h4>Skill Roadmap</h4>
+                    <p>Personalized 30/60/90-day learning trajectories to bridge critical skill gaps.</p>
+                </div>
+                <div class="module-item">
+                    <h4>Interview Intelligence</h4>
+                    <p>Predictive question models and strategic preparation based on your profile.</p>
+                </div>
+                <div class="module-item">
+                    <h4>Promotion Readiness</h4>
+                    <p>Objective measurement of your qualifications against next-level leadership roles.</p>
+                </div>
+                <div class="module-item">
+                    <h4>Portfolio Analyzer</h4>
+                    <p>Holistic review of projects and case studies for maximum professional appeal.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>AIVI – Media Kit</span>
+            <span>Page <span class="page-num"></span></span>
+        </div>
+    </div>
+
+    <!-- PAGE 5: KEY FEATURES -->
+    <div class="page">
+        <div class="content">
+            <h2>Key Features</h2>
+            <p>AIVI translates complex algorithmic analysis into an elegant, user-friendly interface. Every feature is
+                designed for immediate, measurable impact.</p>
+
+            <ul style="margin-top: 2rem; margin-bottom: 2rem;">
+                <li><strong>AI Scoring System:</strong> Objective, multi-vector grades for your resume and LinkedIn.
+                </li>
+                <li><strong>Structured Impact Analysis:</strong> Ensuring every bullet point demonstrates measurable
+                    results.</li>
+                <li><strong>Keyword Gap Detection:</strong> Pinpointing exactly what vocabulary is missing for your
+                    target roles.</li>
+                <li><strong>Recruiter Visibility Scoring:</strong> Understanding how easily you can be found in talent
+                    searches.</li>
+                <li><strong>One-Click Optimization:</strong> Instantly apply AI recommendations to your documents.</li>
+                <li><strong>Analytics Dashboard:</strong> A unified view of your career health and growth metrics.</li>
+            </ul>
+
+            <div class="grid-2">
+                <div class="placeholder">
+                    [Screenshot Placeholder – Resume Analysis]
+                </div>
+                <div class="placeholder">
+                    [Screenshot Placeholder – LinkedIn Optimization]
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>AIVI – Media Kit</span>
+            <span>Page <span class="page-num"></span></span>
+        </div>
+    </div>
+
+    <!-- PAGE 6: STATUS & TRACTION -->
+    <div class="page">
+        <div class="content">
+            <h2>Current Status</h2>
+            <p>We are currently an early-stage, bootstrapped startup riding the momentum of our <strong>Product Hunt
+                    launch</strong>. During this crucial initial phase, we are laser-focused on product validation, user
+                feedback, and refining our AI models.</p>
+
+            <div class="box"
+                style="margin-bottom: 3rem; background: #fff; border: 1px solid var(--primary); padding: 2rem;">
+                <ul style="margin-bottom: 0;">
+                    <li><strong>Free Beta Access:</strong> Exclusively available for the first 1,000 users.</li>
+                    <li><strong>No Friction:</strong> Absolutely no payment or credit card required during the beta
+                        period.</li>
+                    <li><strong>Bootstrapped Agility:</strong> Built by a passionate founder, allowing for rapid
+                        iteration based on direct user input.</li>
+                </ul>
+            </div>
+
+            <h2>Traction</h2>
+            <div class="grid-2" style="text-align: center; margin-bottom: 3rem;">
+                <div class="box" style="padding: 2.5rem 1rem;">
+                    <div style="font-size: 3rem; font-weight: 800; color: var(--primary); line-height: 1;">[XX]+</div>
+                    <div
+                        style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 0.5rem;">
+                        Beta Users</div>
+                </div>
+                <div class="box" style="padding: 2.5rem 1rem;">
+                    <div style="font-size: 3rem; font-weight: 800; color: var(--primary); line-height: 1;">Live</div>
+                    <div
+                        style="font-size: 0.95rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 0.5rem;">
+                        Product Hunt Launch</div>
+                </div>
+            </div>
+
+            <div class="placeholder" style="min-height: 120px;">
+                [Placeholder – Early Testimonials & Engagement Metrics]
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>AIVI – Media Kit</span>
+            <span>Page <span class="page-num"></span></span>
+        </div>
+    </div>
+
+    <!-- PAGE 7: AUDIENCE & COLLABORATION -->
+    <div class="page">
+        <div class="content">
+            <h2>Target Audience</h2>
+            <p>AIVI is built for ambitious professionals who treat their career as a trajectory that can be optimized
+                and accelerated.</p>
+
+            <div class="grid-2" style="margin-bottom: 3.5rem;">
+                <div>
+                    <h4>Job Seekers</h4>
+                    <p style="font-size: 0.95rem;">Navigating the modern job market and needing to stand out in a sea of
+                        applicants.</p>
+                </div>
+                <div>
+                    <h4>Mid-Level Professionals</h4>
+                    <p style="font-size: 0.95rem;">Seeking to break into senior roles and land promotions through
+                        strategic positioning.</p>
+                </div>
+                <div>
+                    <h4>Career Switchers</h4>
+                    <p style="font-size: 0.95rem;">Learning to translate past experiences into relevant keywords for a
+                        new industry.</p>
+                </div>
+                <div>
+                    <h4>Students & Graduates</h4>
+                    <p style="font-size: 0.95rem;">Building a strong foundational profile to launch their early careers
+                        successfully.</p>
+                </div>
+            </div>
+
+            <h2>Collaboration Opportunities</h2>
+            <p>We are actively seeking forward-thinking creators and career influencers to partner with us. AIVI
+                provides immense, immediate value to your audience.</p>
+
+            <div class="box" style="background: #f8fafc; margin-top: 1.5rem;">
+                <ul style="margin-bottom: 0;">
+                    <li><strong>Product Walkthrough Reels:</strong> Demonstrate the "aha" moment of seeing a structured
+                        resume analysis.</li>
+                    <li><strong>Resume Makeover Challenge:</strong> Transform an audience member's job prospects using
+                        AIVI.</li>
+                    <li><strong>LinkedIn Audit Demo:</strong> Show live optimization of an outdated LinkedIn profile.
+                    </li>
+                    <li><strong>Giveaway Access:</strong> Offer exclusive, guaranteed seating in our limited 1,000-user
+                        Beta.</li>
+                    <li><strong>Future Affiliate Partnership:</strong> Early alignment positions you for lucrative
+                        revenue sharing post-Beta.</li>
+                    <li><strong>Custom Discount Codes:</strong> Branded hooks for your specific community.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>AIVI – Media Kit</span>
+            <span>Page <span class="page-num"></span></span>
+        </div>
+    </div>
+
+    <!-- PAGE 8: WHY & FOUNDER -->
+    <div class="page">
+        <div class="content">
+            <h2>Why Collaborate Now?</h2>
+            <p>Partnering with AIVI during our launch phase provides maximum leverage for early adopters.</p>
+
+            <div class="grid-2" style="margin-bottom: 4rem;">
+                <div style="border-left: 4px solid var(--secondary); padding-left: 1rem;">
+                    <h4 style="color: var(--text-main);">Early-Stage Momentum</h4>
+                    <p style="font-size: 0.95rem; margin-bottom: 0;">Ride the wave of a fresh, innovative product launch
+                        rather than promoting saturated tools.</p>
+                </div>
+                <div style="border-left: 4px solid var(--secondary); padding-left: 1rem;">
+                    <h4 style="color: var(--text-main);">The First 1,000 Phase</h4>
+                    <p style="font-size: 0.95rem; margin-bottom: 0;">Create urgency for your audience by offering access
+                        to a highly limited beta program.</p>
+                </div>
+                <div style="border-left: 4px solid var(--secondary); padding-left: 1rem;">
+                    <h4 style="color: var(--text-main);">High-Engagement Niche</h4>
+                    <p style="font-size: 0.95rem; margin-bottom: 0;">Career growth and job optimization are inherently
+                        high-interest, actionable topics.</p>
+                </div>
+                <div style="border-left: 4px solid var(--secondary); padding-left: 1rem;">
+                    <h4 style="color: var(--text-main);">AI + Productivity</h4>
+                    <p style="font-size: 0.95rem; margin-bottom: 0;">Align with the most aggressive growth category in
+                        software today.</p>
+                </div>
+            </div>
+
+            <h2>Founder Note</h2>
+            <div
+                style="background: #fff; border: 1px solid var(--border); padding: 2.5rem; border-radius: 12px; margin-top: 2rem;">
+                <p
+                    style="font-size: 1.15rem; color: var(--text-main); font-style: italic; margin-bottom: 1.5rem; line-height: 1.8;">
+                    "I built AIVI from scratch because I saw talented people getting sidelined by automated systems. The
+                    job search process shouldn't be a black box where only those who know the 'rules' succeed. As a
+                    bootstrapped founder, my focus isn't on hype—it's on solving real career problems and giving power
+                    back to the candidate."
+                </p>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div
+                        style="width: 50px; height: 50px; background: var(--bg-body); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary);">
+                        AM</div>
+                    <div>
+                        <div style="font-weight: 700; color: var(--text-main);">Abhishek Mishra</div>
+                        <div style="font-size: 0.9rem; color: var(--text-muted);">Founder & Developer</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>AIVI – Media Kit</span>
+            <span>Page <span class="page-num"></span></span>
+        </div>
+    </div>
+
+    <!-- PAGE 9: CONTACT -->
+    <div class="page"
+        style="background: var(--bg-body); justify-content: center; align-items: center; text-align: center;">
+        <div class="content"
+            style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%;">
+
+            <h2 style="font-size: 3rem; margin-bottom: 1rem; border: none;">Let's Connect</h2>
+            <p style="font-size: 1.2rem; max-width: 600px; margin-bottom: 3rem;">Ready to optimize careers together?
+                Reach out to discuss partnerships, features, and beta access.</p>
+
+            <div
+                style="background: white; padding: 3rem; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.06); width: 100%; max-width: 550px; text-align: left;">
+                <div style="margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem;">
+                    <div
+                        style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 0.3rem;">
+                        Founder</div>
+                    <div style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);">Abhishek Mishra</div>
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <div
+                        style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 0.3rem;">
+                        Email</div>
+                    <div style="font-size: 1.25rem; font-weight: 600; color: var(--primary);">[Insert Email Placeholder]
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <div
+                        style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 0.3rem;">
+                        Website</div>
+                    <div style="font-size: 1.25rem; font-weight: 600; color: var(--primary);">
+                        <a href="https://aivisibilityinsights.com"
+                            style="color: inherit; text-decoration: none;">aivisibilityinsights.com</a>
+                    </div>
+                </div>
+
+                <div>
+                    <div
+                        style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 0.3rem;">
+                        Product Hunt</div>
+                    <div style="font-size: 1.25rem; font-weight: 600; color: var(--primary);">[Product Hunt Link
+                        Placeholder]</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="page-footer" style="width: 100%; justify-content: center; border-top: none;">
+            <span>AIVI – AI Career Intelligence OS</span>
+        </div>
+    </div>
+
+</body>
+
+</html>

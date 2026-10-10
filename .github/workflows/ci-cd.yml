@@ -1,0 +1,150 @@
+name: AIVI Campus CI/CD Pipeline
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # ============================================================================
+  # STAGE 1: PRE-FLIGHT VERIFICATION GATES (Runs on every PR & Push)
+  # ============================================================================
+  pre-flight-checks:
+    name: "Pre-Flight Checks (Typecheck, Vitest, Security, Functions)"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Frontend Dependencies
+        run: npm ci
+
+      - name: "Check 1: TypeScript Strict Typecheck"
+        run: npm run typecheck
+
+      - name: "Check 2: Vitest 183-Test Suite Baseline"
+        run: npm run test
+
+      - name: "Check 3: Security Fail-Closed Audit"
+        run: npm run security:verify
+
+      - name: "Check 4: Cloud Functions TypeScript Build"
+        run: |
+          cd functions
+          npm ci
+          npm run build
+
+  # ============================================================================
+  # STAGE 2: AUTO-DEPLOY TO STAGING (staging.aivicampus.com)
+  # Triggers automatically when pre-flight checks pass on main branch
+  # ============================================================================
+  deploy-staging:
+    name: "Deploy to Staging (staging.aivicampus.com)"
+    needs: pre-flight-checks
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://staging.aivicampus.com
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Staging Bundle
+        run: npm run build:staging
+
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy Staging Bundle to Hostinger VPS
+        run: |
+          # Backup current staging
+          ssh root@${{ secrets.VPS_HOST }} "mkdir -p /var/www/aivicampus-staging/backups && cp -r /var/www/aivicampus-staging/html /var/www/aivicampus-staging/backups/staging_pre_${{ github.sha }} || true"
+          
+          # Sync new build to staging html
+          rsync -avz --delete dist/ root@${{ secrets.VPS_HOST }}:/var/www/aivicampus-staging/html/
+          
+          # Ensure correct permissions
+          ssh root@${{ secrets.VPS_HOST }} "chown -R www-data:www-data /var/www/aivicampus-staging/html && systemctl reload nginx"
+
+  # ============================================================================
+  # STAGE 3: ATOMIC ZERO-DOWNTIME DEPLOYMENT TO PRODUCTION (aivicampus.com)
+  # Protected by GitHub Environment Manual Approval Gate (Abhishek / CTO)
+  # ============================================================================
+  deploy-production:
+    name: "Deploy to Production (aivicampus.com - Zero Downtime)"
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://aivicampus.com
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Production Bundle
+        run: npm run build
+
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Atomic Release Swap on VPS
+        run: |
+          RELEASE_TAG="release_${{ github.sha }}"
+          TARGET_DIR="/var/www/aivicampus-prod/releases/${RELEASE_TAG}/html"
+          
+          echo "1. Creating release directory: ${TARGET_DIR}"
+          ssh root@${{ secrets.VPS_HOST }} "mkdir -p ${TARGET_DIR}"
+          
+          echo "2. Transferring production bundle via rsync..."
+          rsync -avz --delete dist/ root@${{ secrets.VPS_HOST }}:${TARGET_DIR}/
+          
+          echo "3. Performing atomic symlink swap (1 millisecond zero-downtime)..."
+          ssh root@${{ secrets.VPS_HOST }} "
+            chown -R www-data:www-data /var/www/aivicampus-prod/releases/${RELEASE_TAG}
+            ln -sfn /var/www/aivicampus-prod/releases/${RELEASE_TAG}/html /var/www/aivicampus-prod/current
+            systemctl reload nginx
+            
+            # Prune old releases, keep last 5 for instant rollback
+            cd /var/www/aivicampus-prod/releases
+            ls -dt release_* 2>/dev/null | tail -n +6 | xargs rm -rf 2>/dev/null || true
+          "
+          echo "Production deployment successfully completed."

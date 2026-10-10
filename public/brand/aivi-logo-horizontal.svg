@@ -1,0 +1,11 @@
+<svg width="196" height="40" viewBox="0 0 196 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(0 -8) scale(0.75)">
+    <path d="M14 52L32 12L50 52" stroke="#101820" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M24.5 40L32 32.5L40 25.5" stroke="#1C6B68" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="24.5" cy="40" r="2.5" fill="#1C6B68"/>
+    <circle cx="32" cy="32.5" r="2.5" fill="#1C6B68" fill-opacity="0.9"/>
+    <circle cx="40" cy="25.5" r="2.5" fill="#1C6B68"/>
+  </g>
+  <text x="52" y="19" fill="#101820" font-family="Georgia, 'Times New Roman', serif" font-size="20" font-weight="700" letter-spacing="0.5">AIVI</text>
+  <text x="53" y="31" fill="#53606A" font-family="Arial, Helvetica, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.8">CAREER INTELLIGENCE OS</text>
+</svg>

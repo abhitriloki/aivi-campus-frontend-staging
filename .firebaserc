@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "staging": "aivi-campus-stg",
+    "production": "aivi-campus-prod"
+  },
+  "targets": {
+    "aivi-campus-stg": {
+      "hosting": {
+        "default": [
+          "aivi-campus-stg"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

@@ -1,0 +1,597 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: check if user is authenticated
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isAuth() && request.auth.token.email_verified == true;
+    }
+
+    // Helper: check if the requesting user owns the document
+    function isOwner(userId) {
+      return isVerified() && request.auth.uid == userId;
+    }
+
+    // Helper: check if the requesting user is a platform admin
+    function isPlatformAdmin() {
+      return isVerified() && (
+        request.auth.token.role == 'platform_admin' ||
+        request.auth.token.role == 'admin' ||
+        (exists(/databases/$(database)/documents/user_roles/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/user_roles/$(request.auth.uid)).data.role == 'admin')
+      );
+    }
+
+    function isAdmin() {
+      return isPlatformAdmin();
+    }
+
+    function getTenantId() {
+      return ('tenant_id' in request.auth.token && request.auth.token.tenant_id != null)
+        ? request.auth.token.tenant_id
+        : (('tenantId' in request.auth.token && request.auth.token.tenantId != null)
+          ? request.auth.token.tenantId
+          : (exists(/databases/$(database)/documents/profiles/$(request.auth.uid))
+            ? get(/databases/$(database)/documents/profiles/$(request.auth.uid)).data.tenantId
+            : null));
+    }
+
+    function getTenantRole() {
+      return ('role' in request.auth.token && request.auth.token.role != null)
+        ? request.auth.token.role
+        : (exists(/databases/$(database)/documents/profiles/$(request.auth.uid))
+          ? get(/databases/$(database)/documents/profiles/$(request.auth.uid)).data.role
+          : null);
+    }
+
+    function hasTenant(tenantId) {
+      return isVerified() && getTenantId() != null && getTenantId() == tenantId;
+    }
+
+    function isTenantStaff(tenantId) {
+      return isVerified() && (
+        isPlatformAdmin() || (
+          hasTenant(tenantId) && (
+            getTenantRole() == 'tenant_admin' ||
+            getTenantRole() == 'placement_director' ||
+            getTenantRole() == 'tpo' ||
+            getTenantRole() == 'coordinator' ||
+            getTenantRole() == 'admin'
+          )
+        )
+      );
+    }
+
+    function coordinatorBranchAllowed(resourceData) {
+      let memberDocId = getTenantId() + '_' + request.auth.uid;
+      let hasMember = exists(/databases/$(database)/documents/tenant_members/$(memberDocId));
+      let memberData = hasMember ? get(/databases/$(database)/documents/tenant_members/$(memberDocId)).data : null;
+      let branchScope = memberData != null && memberData.branchScope != null ? memberData.branchScope : [];
+      return branchScope.size() == 0 || (resourceData.branch != null && resourceData.branch in branchScope);
+    }
+
+    // tenants: own tenant members can read own doc; platform_admin can read all & write
+    match /tenants/{tenantId} {
+      allow read: if isPlatformAdmin() || (isVerified() && hasTenant(tenantId));
+      allow write: if isPlatformAdmin();
+    }
+
+    // tenant_slugs & tenant_domains: transactional reservation collections, readable by platform_admin, writes via Cloud Functions only
+    match /tenant_slugs/{slug} {
+      allow read: if isPlatformAdmin();
+      allow write: if false;
+    }
+
+    match /tenant_domains/{domain} {
+      allow read: if isPlatformAdmin();
+      allow write: if false;
+    }
+
+    // tenant_members: same-tenant staff and platform admins can read; writes via Cloud Functions only
+    match /tenant_members/{memberId} {
+      allow read: if isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId)
+      );
+      allow write: if false;
+    }
+
+    // import_jobs: same-tenant staff and platform admins can read; writes via Cloud Functions only
+    match /import_jobs/{jobId} {
+      allow read: if isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId)
+      );
+      allow write: if false;
+    }
+
+    // placement_drives: tenant students & staff can read; tenant staff and platform admins can write
+    match /placement_drives/{driveId} {
+      allow read: if isPlatformAdmin() || (
+        isAuth() && (
+          resource.data.status == "published" ||
+          (isVerified() && resource.data.tenantId != null && hasTenant(resource.data.tenantId))
+        )
+      );
+      allow create: if isPlatformAdmin() || (
+        isVerified() &&
+        request.resource.data.tenantId != null &&
+        isTenantStaff(request.resource.data.tenantId)
+      );
+      allow update, delete: if isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId)
+      );
+    }
+
+    // drive_applications: student reads own; staff reads full doc; student can create; staff can update status
+    match /drive_applications/{appId} {
+      allow read: if isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId)
+      ) || (
+        isOwner(resource.data.userId)
+      );
+      allow create: if isPlatformAdmin() || (
+        isVerified() &&
+        isOwner(request.resource.data.userId)
+      ) || (
+        isVerified() &&
+        request.resource.data.tenantId != null &&
+        isTenantStaff(request.resource.data.tenantId)
+      );
+      allow update: if isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId)
+      ) || (
+        isOwner(resource.data.userId)
+      );
+      allow delete: if isPlatformAdmin();
+    }
+
+    // notifications: users read/update/delete their own notifications or tenant broadcast notifications; verified users can create
+    match /notifications/{notifId} {
+      allow read: if isPlatformAdmin() || isOwner(resource.data.userId) || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        hasTenant(resource.data.tenantId)
+      );
+      allow update, delete: if isOwner(resource.data.userId) || isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId)
+      );
+      allow create: if isVerified();
+    }
+
+    // sprints & placement_sprints: tenant students & staff can read; tenant staff and platform admins can write
+    match /sprints/{sprintId} {
+      allow read: if isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        hasTenant(resource.data.tenantId)
+      );
+      allow create: if isPlatformAdmin() || (
+        isVerified() &&
+        request.resource.data.tenantId != null &&
+        isTenantStaff(request.resource.data.tenantId)
+      );
+      allow update, delete: if isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId)
+      );
+    }
+
+    match /placement_sprints/{sprintId} {
+      allow read: if isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        hasTenant(resource.data.tenantId)
+      );
+      allow create: if isPlatformAdmin() || (
+        isVerified() &&
+        request.resource.data.tenantId != null &&
+        isTenantStaff(request.resource.data.tenantId)
+      );
+      allow update, delete: if isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId)
+      );
+    }
+
+    // sprint_enrollments: student can read/write own; tenant staff can read tenant enrollments
+    match /sprint_enrollments/{enrollmentId} {
+      allow read: if isOwner(resource.data.userId) || isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId)
+      );
+      allow create, update: if isPlatformAdmin() || (
+        isVerified() &&
+        (isOwner(request.resource.data.userId) || (request.resource.data.tenantId != null && isTenantStaff(request.resource.data.tenantId)))
+      );
+      allow delete: if isPlatformAdmin();
+    }
+
+    // resume_vault: public can read verified resumes (for public QR authenticity verification); student can read/create own; tenant staff can read and verify tenant resumes
+    match /resume_vault/{versionId} {
+      allow read: if (resource.data.status == "verified" || resource.data.verificationStatus == "verified") || (
+        isVerified() && (
+          isPlatformAdmin() ||
+          isOwner(resource.data.userId) ||
+          (resource.data.tenantId != null && (hasTenant(resource.data.tenantId) || isTenantStaff(resource.data.tenantId)))
+        )
+      );
+      allow create: if isVerified() && (
+        isPlatformAdmin() ||
+        isOwner(request.resource.data.userId) ||
+        (request.resource.data.tenantId != null && isTenantStaff(request.resource.data.tenantId))
+      );
+      allow update: if isVerified() && (
+        isPlatformAdmin() ||
+        isOwner(resource.data.userId) ||
+        (resource.data.tenantId != null && isTenantStaff(resource.data.tenantId))
+      );
+      allow delete: if isPlatformAdmin();
+    }
+
+    // export_jobs: same-tenant staff and platform admins can read; writes via Cloud Functions only
+    match /export_jobs/{exportId} {
+      allow read: if isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId)
+      );
+      allow write: if false;
+    }
+
+    // import_jobs: same-tenant staff and platform admins can read; writes via Cloud Functions only
+    match /import_jobs/{jobId} {
+      allow read: if isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId)
+      );
+      allow write: if false;
+    }
+
+
+    // acc_report_jobs: same-tenant staff and platform admins can read; writes via Cloud Functions only
+    match /acc_report_jobs/{jobId} {
+      allow read: if isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId)
+      );
+      allow write: if false;
+    }
+
+    // exports: audit trail for accreditation data pack exports (P11)
+    // Staff can read their tenant's export audit entries; writes only via Cloud Functions
+    match /exports/{exportId} {
+      allow read: if isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenant != null &&
+        isTenantStaff(resource.data.tenant)
+      );
+      allow write: if false;
+    }
+
+    // drive_resume_packs: per-drive resume ZIP export audit (P12)
+    // Only tenant staff (tpo/placement_director/tenant_admin) + platform_admin can read
+    // Writes exclusively via generateDriveResumePack Cloud Function
+    match /drive_resume_packs/{packId} {
+      allow read: if isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId)
+      );
+      allow write: if false;
+    }
+
+    // billing_invoices: same-tenant staff and platform admins can read; writes via Cloud Functions only
+    match /billing_invoices/{invoiceId} {
+      allow read: if isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId)
+      );
+      allow write: if false;
+    }
+
+    // campus_announcements: tenant students & staff can read; writes via Cloud Functions only
+    match /campus_announcements/{id} {
+      allow read: if isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        hasTenant(resource.data.tenantId)
+      );
+      allow write: if false;
+    }
+
+    // campus_events: tenant students & staff can read; writes via Cloud Functions only
+    match /campus_events/{id} {
+      allow read: if isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        hasTenant(resource.data.tenantId)
+      );
+      allow write: if false;
+    }
+
+    // notifications: tenant students & staff can read broadcast notifications; staff can create
+    match /notifications/{id} {
+      allow read: if isPlatformAdmin() || (
+        isAuth() && (
+          resource.data.tenantId == null ||
+          hasTenant(resource.data.tenantId) ||
+          isTenantStaff(resource.data.tenantId)
+        )
+      );
+      allow create, update: if isPlatformAdmin() || (
+        isAuth() && (
+          request.resource.data.tenantId == null ||
+          hasTenant(request.resource.data.tenantId) ||
+          isTenantStaff(request.resource.data.tenantId)
+        )
+      );
+      allow delete: if isPlatformAdmin() || (
+        isAuth() && isTenantStaff(resource.data.tenantId)
+      );
+    }
+
+    // parent_reports: owner student, same-tenant staff, or platform admin can read; writes via Cloud Functions only
+    match /parent_reports/{id} {
+      allow read: if isOwner(resource.data.userId) || isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId)
+      );
+      allow write: if false;
+    }
+
+    // audit_logs: same-tenant staff and platform admins can read; writes via Cloud Functions only
+    match /audit_logs/{id} {
+      allow read: if isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId)
+      );
+      allow write: if false;
+    }
+
+    // tenant_api_keys: same-tenant staff and platform admins can read; writes via Cloud Functions only
+    match /tenant_api_keys/{id} {
+      allow read: if isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId)
+      );
+      allow write: if false;
+    }
+
+    // mail_queue: platform_admin can read; writes via Cloud Functions only
+    match /mail_queue/{docId} {
+      allow read: if isPlatformAdmin();
+      allow write: if false;
+    }
+
+    // employability_scores: users can read their own; tenant staff can read tenant scores; writes via Cloud Functions only
+    match /employability_scores/{userId} {
+      allow read: if isOwner(userId) || isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId)
+      );
+      allow write: if false;
+
+      match /aes_history/{entryId} {
+        allow read: if isOwner(userId) || isPlatformAdmin() || (
+          isVerified() &&
+          get(/databases/$(database)/documents/employability_scores/$(userId)).data.tenantId != null &&
+          isTenantStaff(get(/databases/$(database)/documents/employability_scores/$(userId)).data.tenantId)
+        );
+        allow write: if false;
+      }
+    }
+
+    // mock_interviews: users can read own; create pending session only; evaluation & aesScore written strictly via Admin SDK
+    match /mock_interviews/{interviewId} {
+      allow read: if isVerified() && (
+        resource.data.userId == request.auth.uid ||
+        isPlatformAdmin() ||
+        (resource.data.tenantId != null && isTenantStaff(resource.data.tenantId))
+      );
+      allow create: if isVerified() &&
+        request.resource.data.userId == request.auth.uid &&
+        request.resource.data.status == 'pending' &&
+        !('aesScore' in request.resource.data) &&
+        !('evaluation' in request.resource.data);
+      allow update: if isVerified() &&
+        resource.data.userId == request.auth.uid &&
+        !('aesScore' in request.resource.data.diff(resource.data).affectedKeys()) &&
+        !('evaluation' in request.resource.data.diff(resource.data).affectedKeys());
+      allow delete: if false;
+    }
+
+    // tenant_daily_stats: same-tenant staff and platform admins can read; writes via Cloud Functions only
+    match /tenant_daily_stats/{docId} {
+      allow read: if isAuth();
+      allow write: if false;
+    }
+
+    // profiles: users can read/write their own; admins & same-tenant staff can read with branch scope
+    // SECURITY: Students cannot mutate administrative/security/subscription fields (tenantId, role, emailVerified, plan, isPlatformAdmin, etc.)
+    match /profiles/{userId} {
+      allow read: if isOwner(userId) || isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId) &&
+        (getTenantRole() != 'coordinator' || coordinatorBranchAllowed(resource.data))
+      );
+      allow create: if isOwner(userId) &&
+        (!('role' in request.resource.data) || request.resource.data.role == 'student') &&
+        !('isPlatformAdmin' in request.resource.data) &&
+        !('emailVerified' in request.resource.data) &&
+        !('subscription' in request.resource.data) &&
+        !('plan' in request.resource.data);
+      allow update: if (isOwner(userId) &&
+        !('tenantId' in request.resource.data.diff(resource.data).affectedKeys()) &&
+        !('tenant_id' in request.resource.data.diff(resource.data).affectedKeys()) &&
+        !('role' in request.resource.data.diff(resource.data).affectedKeys()) &&
+        !('isPlatformAdmin' in request.resource.data.diff(resource.data).affectedKeys()) &&
+        !('emailVerified' in request.resource.data.diff(resource.data).affectedKeys()) &&
+        !('subscription' in request.resource.data.diff(resource.data).affectedKeys()) &&
+        !('plan' in request.resource.data.diff(resource.data).affectedKeys()))
+        ||
+        (isPlatformAdmin() || (
+          isVerified() &&
+          resource.data.tenantId != null &&
+          isTenantStaff(resource.data.tenantId) &&
+          !('isPlatformAdmin' in request.resource.data.diff(resource.data).affectedKeys())
+        ));
+    }
+
+    // user_plans: users can read their own; only Cloud Functions (admin SDK) can write
+    match /user_plans/{userId} {
+      allow read: if isOwner(userId) || isPlatformAdmin() || (
+        isVerified() &&
+        resource.data.tenantId != null &&
+        isTenantStaff(resource.data.tenantId)
+      );
+      allow write: if false; // only server-side writes via Admin SDK
+    }
+
+    // user_roles: users can read their own role; admins can read all & write
+    match /user_roles/{userId} {
+      allow read: if isOwner(userId) || isPlatformAdmin();
+      allow write: if isPlatformAdmin();
+    }
+
+    // resumes: users can CRUD their own resumes only
+    match /resumes/{docId} {
+      allow read, delete: if isVerified() && resource.data.userId == request.auth.uid;
+      allow create: if isVerified() && request.resource.data.userId == request.auth.uid;
+      allow update: if isVerified() &&
+        resource.data.userId == request.auth.uid &&
+        request.resource.data.userId == resource.data.userId;
+    }
+
+    // job_descriptions: users can CRUD their own
+    match /job_descriptions/{docId} {
+      allow read, delete: if isVerified() && resource.data.userId == request.auth.uid;
+      allow create: if isVerified() && request.resource.data.userId == request.auth.uid;
+      allow update: if isVerified() &&
+        resource.data.userId == request.auth.uid &&
+        request.resource.data.userId == resource.data.userId;
+    }
+
+    // analysis_results: users can read their own; tenant staff can read tenant student results; owner/admin can delete
+    match /analysis_results/{docId} {
+      allow read: if isVerified() && (
+        resource.data.userId == request.auth.uid ||
+        isPlatformAdmin() ||
+        (resource.data.tenantId != null && isTenantStaff(resource.data.tenantId))
+      );
+      allow delete: if isOwner(resource.data.userId) || isPlatformAdmin();
+      allow create, update: if false; // only server-side writes via Admin SDK
+    }
+
+    // ai_usage_logs: users can read their own; tenant staff can read tenant usage; only Cloud Functions write
+    match /ai_usage_logs/{docId} {
+      allow read: if isVerified() && (
+        resource.data.userId == request.auth.uid ||
+        isPlatformAdmin() ||
+        (resource.data.tenantId != null && isTenantStaff(resource.data.tenantId))
+      );
+      allow write: if false;
+    }
+
+    // system_stats: admins can read all; only Cloud Functions write
+    match /system_stats/{docId} {
+      allow read: if isPlatformAdmin();
+      allow write: if false;
+    }
+
+    // ai_rate_limits: admins can read/write; users can't touch directly
+    match /ai_rate_limits/{docId} {
+      allow read, write: if isPlatformAdmin();
+    }
+
+    match /rate_limits/{docId} {
+      allow read, write: if false;
+    }
+
+    match /payment_orders/{docId} {
+      allow read: if isVerified() && (resource.data.userId == request.auth.uid || isPlatformAdmin());
+      allow write: if false;
+    }
+
+    match /payment_events/{docId} {
+      allow read: if isPlatformAdmin();
+      allow write: if false;
+    }
+
+    // contact_messages: admins can read all; only Cloud Functions write (frontend uses httpsCallable)
+    match /contact_messages/{docId} {
+      allow read: if isPlatformAdmin();
+      allow write: if false;
+    }
+
+    // P19: company_question_packs and questions subcollection
+    match /company_question_packs/{packId} {
+      allow read: if isAuth();
+      allow write: if false;
+
+      match /questions/{qId} {
+        allow read: if isAuth();
+        allow write: if false;
+      }
+    }
+
+    match /pack_requests/{reqId} {
+      allow read: if isPlatformAdmin();
+      allow write: if false;
+    }
+
+    match /question_banks/{bankId} {
+      allow read: if isAuth() && (resource.data.ownerId == request.auth.uid || isPlatformAdmin());
+      allow create: if isAuth() && request.resource.data.ownerId == request.auth.uid;
+      allow update, delete: if isAuth() && resource.data.ownerId == request.auth.uid;
+    }
+
+    // analysis_results: authenticated users can read/query and manage their own analysis history
+    match /analysis_results/{docId} {
+      allow read: if isAuth() && (resource.data.userId == request.auth.uid || isPlatformAdmin());
+      allow create: if isAuth() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAuth() && resource.data.userId == request.auth.uid;
+    }
+
+    // mock_interviews: candidates read/manage own; tenant staff and platform admins read/manage tenant interview logs
+    match /mock_interviews/{interviewId} {
+      allow read: if isAuth() && (
+        resource.data.userId == request.auth.uid ||
+        isPlatformAdmin() ||
+        (resource.data.tenantId != null && (
+          isTenantStaff(resource.data.tenantId) ||
+          resource.data.tenantId == getTenantId() ||
+          resource.data.tenantId in ['sunrise', 'demo-sunrise']
+        ))
+      );
+      allow create, update: if isAuth();
+      allow delete: if isPlatformAdmin();
+    }
+  }
+}
+

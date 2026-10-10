@@ -1,0 +1,166 @@
+{
+  "company": "American Express",
+  "companySlug": "american-express",
+  "industryGroup": "Banking & Financial Services",
+  "roleTracks": [
+    "Engineer-1",
+    "Data Analyst"
+  ],
+  "hiringType": "Makeathon / On-Campus",
+  "logoLetter": "A",
+  "difficultyFocus": "Hard",
+  "version": "v1",
+  "questionCount": 14,
+  "isOfficialContent": false,
+  "isCustom": false,
+  "reviewStatus": "curated",
+  "disclaimer": "Practice questions based on commonly reported candidate interview experiences. Not official company content.",
+  "seeded": true,
+  "questions": [
+    {
+      "round": "Aptitude Basics",
+      "text": "A train running at 72 km/h crosses a 180m platform in 18 seconds. Find the length of the train.",
+      "modelAnswer": "Speed = 72 * (5/18) = 20 m/s. Total distance = 20 * 18 = 360m. Train length = 360 - 180 = 180 meters.",
+      "difficulty": "easy",
+      "frequency": "common",
+      "tags": [
+        "Speed & Distance"
+      ]
+    },
+    {
+      "round": "Aptitude Basics",
+      "text": "12 workers finish a task in 15 days. How many workers complete it in 10 days?",
+      "modelAnswer": "Total work = 12 * 15 = 180 man-days. Workers needed = 180 / 10 = 18 workers.",
+      "difficulty": "easy",
+      "frequency": "common",
+      "tags": [
+        "Time & Work"
+      ]
+    },
+    {
+      "round": "Aptitude Basics",
+      "text": "Probability of throwing a sum of 7 with two fair 6-sided dice?",
+      "modelAnswer": "Pairs = (1,6), (2,5), (3,4), (4,3), (5,2), (6,1) -> 6 outcomes. 6/36 = 1/6 (~16.67%).",
+      "difficulty": "easy",
+      "frequency": "common",
+      "tags": [
+        "Probability"
+      ]
+    },
+    {
+      "round": "Aptitude Basics",
+      "text": "An article is sold for Rs. 850 at a 15% discount. Find marked price.",
+      "modelAnswer": "Marked Price = 850 / 0.85 = Rs. 1,000.",
+      "difficulty": "easy",
+      "frequency": "common",
+      "tags": [
+        "Profit & Loss"
+      ]
+    },
+    {
+      "round": "Aptitude Basics",
+      "text": "Find the compound interest on Rs 10,000 at 10% per annum for 2 years compounded annually.",
+      "modelAnswer": "Amount = 10000 * (1.1)^2 = 12,100. CI = 12,100 - 10,000 = Rs 2,100.",
+      "difficulty": "medium",
+      "frequency": "often",
+      "tags": [
+        "Interest"
+      ]
+    },
+    {
+      "round": "Technical",
+      "text": "Given an array of integers, find the contiguous subarray with maximum sum (Kadane's Algorithm).",
+      "modelAnswer": "Initialize maxSoFar = nums[0], currMax = nums[0]. Iterate i=1..N-1: currMax = max(nums[i], currMax + nums[i]), maxSoFar = max(maxSoFar, currMax). Return maxSoFar. Time: O(N), Space: O(1).",
+      "difficulty": "hard",
+      "frequency": "common",
+      "tags": [
+        "Algorithms",
+        "Dynamic Programming"
+      ]
+    },
+    {
+      "round": "Technical",
+      "text": "Design a Rate Limiter using Token Bucket or Sliding Window algorithm.",
+      "modelAnswer": "Use Token Bucket storing tokens per user. Refill rate = R tokens/sec, capacity = C. Atomically decrement token on incoming request using Redis Lua script.",
+      "difficulty": "hard",
+      "frequency": "common",
+      "tags": [
+        "System Design"
+      ]
+    },
+    {
+      "round": "Technical",
+      "text": "Explain the difference between Primary Key, Unique Key, and Foreign Key in relational databases.",
+      "modelAnswer": "Primary Key: uniquely identifies row, non-null, 1 per table. Unique Key: enforces uniqueness, permits 1 NULL value. Foreign Key: references PK of another table.",
+      "difficulty": "easy",
+      "frequency": "common",
+      "tags": [
+        "SQL",
+        "DBMS"
+      ]
+    },
+    {
+      "round": "Technical",
+      "text": "What is the difference between Process and Thread?",
+      "modelAnswer": "Process: independent execution unit with isolated virtual memory space. Thread: lightweight execution segment within a process sharing heap memory and file descriptors.",
+      "difficulty": "medium",
+      "frequency": "common",
+      "tags": [
+        "Operating Systems"
+      ]
+    },
+    {
+      "round": "Technical",
+      "text": "Explain REST vs GraphQL API architecture trade-offs.",
+      "modelAnswer": "REST relies on fixed HTTP endpoints (over-fetching/under-fetching data). GraphQL allows clients to request exact JSON schema shapes in a single query endpoint.",
+      "difficulty": "medium",
+      "frequency": "often",
+      "tags": [
+        "Web Architecture",
+        "APIs"
+      ]
+    },
+    {
+      "round": "Behavioral",
+      "text": "Describe a situation where you had a tight deadline and how you prioritized deliverables.",
+      "modelAnswer": "Use STAR framework. Explain how you prioritized core MVP requirements, communicated with lead/stakeholders early, and delivered on schedule.",
+      "difficulty": "medium",
+      "frequency": "common",
+      "tags": [
+        "STAR",
+        "Time Management"
+      ]
+    },
+    {
+      "round": "Behavioral",
+      "text": "Tell me about a time you resolved a technical conflict within your project team.",
+      "modelAnswer": "Focus on active listening, creating an objective pros/cons comparison, running proof-of-concept benchmarks, and aligning on team goals.",
+      "difficulty": "medium",
+      "frequency": "common",
+      "tags": [
+        "Conflict Resolution",
+        "Teamwork"
+      ]
+    },
+    {
+      "round": "HR",
+      "text": "Tell me about yourself and why you want to work at American Express.",
+      "modelAnswer": "Give a 90-second elevator pitch covering academics, technical projects, passion for Banking & Financial Services, and why American Express's culture fits your career goals.",
+      "difficulty": "easy",
+      "frequency": "common",
+      "tags": [
+        "Self Introduction"
+      ]
+    },
+    {
+      "round": "HR",
+      "text": "Where do you see yourself in 3-5 years?",
+      "modelAnswer": "Highlight technical mastery, taking product module ownership, mentoring junior engineers, and contributing to American Express's core business metrics.",
+      "difficulty": "easy",
+      "frequency": "common",
+      "tags": [
+        "Career Goals"
+      ]
+    }
+  ]
+}

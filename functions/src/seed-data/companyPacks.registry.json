@@ -1,0 +1,463 @@
+[
+  {
+    "slug": "tcs-ninja",
+    "company": "TCS Ninja",
+    "industryGroup": "IT Services & Consulting",
+    "roleTracks": [
+      "Systems Engineer",
+      "Software Developer"
+    ],
+    "hiringType": "National Qualifier Test / On-Campus",
+    "logoLetter": "T",
+    "difficultyFocus": "Medium",
+    "version": "v1"
+  },
+  {
+    "slug": "tcs-digital",
+    "company": "TCS Digital",
+    "industryGroup": "IT Services & Consulting",
+    "roleTracks": [
+      "Digital Software Engineer",
+      "Data Engineer"
+    ],
+    "hiringType": "NQT Premium / On-Campus",
+    "logoLetter": "T",
+    "difficultyFocus": "Hard",
+    "version": "v1"
+  },
+  {
+    "slug": "infosys-spdse",
+    "company": "Infosys (SP / DSE)",
+    "industryGroup": "IT Services & Consulting",
+    "roleTracks": [
+      "Specialist Programmer",
+      "Digital Systems Engineer"
+    ],
+    "hiringType": "HackWithInfy / On-Campus",
+    "logoLetter": "I",
+    "difficultyFocus": "Hard",
+    "version": "v1"
+  },
+  {
+    "slug": "wipro-elite-nlth",
+    "company": "Wipro Elite NLTH",
+    "industryGroup": "IT Services & Consulting",
+    "roleTracks": [
+      "Project Engineer"
+    ],
+    "hiringType": "National Level Talent Hunt",
+    "logoLetter": "W",
+    "difficultyFocus": "Medium",
+    "version": "v1"
+  },
+  {
+    "slug": "accenture-adc",
+    "company": "Accenture (Advanced App Dev)",
+    "industryGroup": "IT Services & Consulting",
+    "roleTracks": [
+      "Advanced Application Developer",
+      "Associate Software Engineer"
+    ],
+    "hiringType": "On-Campus / Off-Campus",
+    "logoLetter": "A",
+    "difficultyFocus": "Medium",
+    "version": "v1"
+  },
+  {
+    "slug": "capgemini",
+    "company": "Capgemini",
+    "industryGroup": "IT Services & Consulting",
+    "roleTracks": [
+      "Software Senior Analyst",
+      "Software Engineer"
+    ],
+    "hiringType": "Exceller Drive / On-Campus",
+    "logoLetter": "C",
+    "difficultyFocus": "Medium",
+    "version": "v1"
+  },
+  {
+    "slug": "cognizant-genc",
+    "company": "Cognizant (GenC / Elevate)",
+    "industryGroup": "IT Services & Consulting",
+    "roleTracks": [
+      "Programmer Analyst Trainee",
+      "GenC Elevate Developer"
+    ],
+    "hiringType": "GenC On-Campus",
+    "logoLetter": "C",
+    "difficultyFocus": "Medium",
+    "version": "v1"
+  },
+  {
+    "slug": "hcltech",
+    "company": "HCLTech",
+    "industryGroup": "IT Services & Consulting",
+    "roleTracks": [
+      "Software Engineer",
+      "Graduate Engineer Trainee"
+    ],
+    "hiringType": "First Careers / On-Campus",
+    "logoLetter": "H",
+    "difficultyFocus": "Easy",
+    "version": "v1"
+  },
+  {
+    "slug": "tech-mahindra",
+    "company": "Tech Mahindra",
+    "industryGroup": "IT Services & Consulting",
+    "roleTracks": [
+      "Associate Software Engineer"
+    ],
+    "hiringType": "Campus Hiring",
+    "logoLetter": "T",
+    "difficultyFocus": "Easy",
+    "version": "v1"
+  },
+  {
+    "slug": "ltimindtree",
+    "company": "LTIMindtree",
+    "industryGroup": "IT Services & Consulting",
+    "roleTracks": [
+      "Graduate Trainee",
+      "Software Engineer"
+    ],
+    "hiringType": "Campus Hiring Drive",
+    "logoLetter": "L",
+    "difficultyFocus": "Medium",
+    "version": "v1"
+  },
+  {
+    "slug": "mphasis",
+    "company": "Mphasis",
+    "industryGroup": "IT Services & Consulting",
+    "roleTracks": [
+      "Associate Software Engineer"
+    ],
+    "hiringType": "Off-Campus / On-Campus",
+    "logoLetter": "M",
+    "difficultyFocus": "Medium",
+    "version": "v1"
+  },
+  {
+    "slug": "hexaware",
+    "company": "Hexaware",
+    "industryGroup": "IT Services & Consulting",
+    "roleTracks": [
+      "Software Engineer Trainee",
+      "PGA"
+    ],
+    "hiringType": "Mavericks Campus Drive",
+    "logoLetter": "H",
+    "difficultyFocus": "Medium",
+    "version": "v1"
+  },
+  {
+    "slug": "persistent-systems",
+    "company": "Persistent Systems",
+    "industryGroup": "IT Services & Consulting",
+    "roleTracks": [
+      "Software Engineer"
+    ],
+    "hiringType": "Campus Recruitment",
+    "logoLetter": "P",
+    "difficultyFocus": "Hard",
+    "version": "v1"
+  },
+  {
+    "slug": "deloitte-usi",
+    "company": "Deloitte USI",
+    "industryGroup": "Big 4 & Consulting",
+    "roleTracks": [
+      "Analyst - Technology Consulting",
+      "Risk Advisory"
+    ],
+    "hiringType": "On-Campus Recruitment",
+    "logoLetter": "D",
+    "difficultyFocus": "Medium",
+    "version": "v1"
+  },
+  {
+    "slug": "ey-gds",
+    "company": "EY GDS",
+    "industryGroup": "Big 4 & Consulting",
+    "roleTracks": [
+      "Staff Consultant",
+      "Technology Analyst"
+    ],
+    "hiringType": "Campus / Off-Campus",
+    "logoLetter": "E",
+    "difficultyFocus": "Medium",
+    "version": "v1"
+  },
+  {
+    "slug": "kpmg-india",
+    "company": "KPMG India",
+    "industryGroup": "Big 4 & Consulting",
+    "roleTracks": [
+      "Analyst - IT Advisory"
+    ],
+    "hiringType": "Campus Recruitment",
+    "logoLetter": "K",
+    "difficultyFocus": "Medium",
+    "version": "v1"
+  },
+  {
+    "slug": "pwc-india",
+    "company": "PwC India",
+    "industryGroup": "Big 4 & Consulting",
+    "roleTracks": [
+      "Associate Consultant - Technology"
+    ],
+    "hiringType": "Campus Recruitment",
+    "logoLetter": "P",
+    "difficultyFocus": "Medium",
+    "version": "v1"
+  },
+  {
+    "slug": "zs-associates",
+    "company": "ZS Associates",
+    "industryGroup": "Big 4 & Consulting",
+    "roleTracks": [
+      "Decision Analytics Associate",
+      "Business Technology Analyst"
+    ],
+    "hiringType": "On-Campus Challenge",
+    "logoLetter": "Z",
+    "difficultyFocus": "Hard",
+    "version": "v1"
+  },
+  {
+    "slug": "genpact",
+    "company": "Genpact",
+    "industryGroup": "IT Services & Consulting",
+    "roleTracks": [
+      "Process Associate - Analytics",
+      "Software Engineer"
+    ],
+    "hiringType": "Campus / Walk-In",
+    "logoLetter": "G",
+    "difficultyFocus": "Easy",
+    "version": "v1"
+  },
+  {
+    "slug": "amazon-sde",
+    "company": "Amazon",
+    "industryGroup": "Product & Big Tech",
+    "roleTracks": [
+      "SDE-1",
+      "Software Development Engineer Intern"
+    ],
+    "hiringType": "Off-Campus / On-Campus",
+    "logoLetter": "A",
+    "difficultyFocus": "Hard",
+    "version": "v1"
+  },
+  {
+    "slug": "microsoft",
+    "company": "Microsoft",
+    "industryGroup": "Product & Big Tech",
+    "roleTracks": [
+      "Software Engineer",
+      "Security Engineer"
+    ],
+    "hiringType": "Engage / On-Campus",
+    "logoLetter": "M",
+    "difficultyFocus": "Hard",
+    "version": "v1"
+  },
+  {
+    "slug": "google",
+    "company": "Google",
+    "industryGroup": "Product & Big Tech",
+    "roleTracks": [
+      "Software Engineer (L3)",
+      "Software Engineering Intern"
+    ],
+    "hiringType": "Google Girl Hackathon / Off-Campus",
+    "logoLetter": "G",
+    "difficultyFocus": "Hard",
+    "version": "v1"
+  },
+  {
+    "slug": "adobe",
+    "company": "Adobe",
+    "industryGroup": "Product & Big Tech",
+    "roleTracks": [
+      "Member of Technical Staff",
+      "SDE-1"
+    ],
+    "hiringType": "SheCodes / On-Campus",
+    "logoLetter": "A",
+    "difficultyFocus": "Hard",
+    "version": "v1"
+  },
+  {
+    "slug": "salesforce",
+    "company": "Salesforce",
+    "industryGroup": "Product & Big Tech",
+    "roleTracks": [
+      "Associate Member of Technical Staff"
+    ],
+    "hiringType": "On-Campus Recruitment",
+    "logoLetter": "S",
+    "difficultyFocus": "Hard",
+    "version": "v1"
+  },
+  {
+    "slug": "oracle",
+    "company": "Oracle",
+    "industryGroup": "Product & Big Tech",
+    "roleTracks": [
+      "Server Software Engineer",
+      "Applications Developer"
+    ],
+    "hiringType": "On-Campus Recruitment",
+    "logoLetter": "O",
+    "difficultyFocus": "Hard",
+    "version": "v1"
+  },
+  {
+    "slug": "ibm",
+    "company": "IBM",
+    "industryGroup": "Product & Big Tech",
+    "roleTracks": [
+      "Associate System Engineer",
+      "Software Developer"
+    ],
+    "hiringType": "IBM CodeKnack / Campus",
+    "logoLetter": "I",
+    "difficultyFocus": "Medium",
+    "version": "v1"
+  },
+  {
+    "slug": "sap-labs",
+    "company": "SAP Labs",
+    "industryGroup": "Product & Big Tech",
+    "roleTracks": [
+      "Developer Associate",
+      "Cloud Specialist"
+    ],
+    "hiringType": "SAP iXp / On-Campus",
+    "logoLetter": "S",
+    "difficultyFocus": "Hard",
+    "version": "v1"
+  },
+  {
+    "slug": "cisco",
+    "company": "Cisco",
+    "industryGroup": "Product & Big Tech",
+    "roleTracks": [
+      "Software Engineer - Networking",
+      "Systems Engineer"
+    ],
+    "hiringType": "Ideathon / On-Campus",
+    "logoLetter": "C",
+    "difficultyFocus": "Hard",
+    "version": "v1"
+  },
+  {
+    "slug": "jpmorgan-chase",
+    "company": "JPMorgan Chase & Co.",
+    "industryGroup": "Banking & Financial Services",
+    "roleTracks": [
+      "Software Engineer (Code For Good)",
+      "Tech Analyst"
+    ],
+    "hiringType": "Code For Good / On-Campus",
+    "logoLetter": "J",
+    "difficultyFocus": "Hard",
+    "version": "v1"
+  },
+  {
+    "slug": "american-express",
+    "company": "American Express",
+    "industryGroup": "Banking & Financial Services",
+    "roleTracks": [
+      "Engineer-1",
+      "Data Analyst"
+    ],
+    "hiringType": "Makeathon / On-Campus",
+    "logoLetter": "A",
+    "difficultyFocus": "Hard",
+    "version": "v1"
+  },
+  {
+    "slug": "wells-fargo",
+    "company": "Wells Fargo",
+    "industryGroup": "Banking & Financial Services",
+    "roleTracks": [
+      "Program Associate",
+      "Software Engineer"
+    ],
+    "hiringType": "On-Campus Recruitment",
+    "logoLetter": "W",
+    "difficultyFocus": "Hard",
+    "version": "v1"
+  },
+  {
+    "slug": "morgan-stanley",
+    "company": "Morgan Stanley",
+    "industryGroup": "Banking & Financial Services",
+    "roleTracks": [
+      "Technology Analyst",
+      "SDE"
+    ],
+    "hiringType": "On-Campus Recruitment",
+    "logoLetter": "M",
+    "difficultyFocus": "Hard",
+    "version": "v1"
+  },
+  {
+    "slug": "zoho",
+    "company": "Zoho",
+    "industryGroup": "Product & Big Tech",
+    "roleTracks": [
+      "Member Technical Staff",
+      "Software Developer"
+    ],
+    "hiringType": "Off-Campus / Direct Drive",
+    "logoLetter": "Z",
+    "difficultyFocus": "Hard",
+    "version": "v1"
+  },
+  {
+    "slug": "flipkart",
+    "company": "Flipkart",
+    "industryGroup": "Fintech & E-Commerce",
+    "roleTracks": [
+      "SDE-1",
+      "UI Engineer"
+    ],
+    "hiringType": "GRiD Hackathon / On-Campus",
+    "logoLetter": "F",
+    "difficultyFocus": "Hard",
+    "version": "v1"
+  },
+  {
+    "slug": "phonepe",
+    "company": "PhonePe",
+    "industryGroup": "Fintech & E-Commerce",
+    "roleTracks": [
+      "Software Engineer",
+      "Backend Engineer"
+    ],
+    "hiringType": "On-Campus / Off-Campus",
+    "logoLetter": "P",
+    "difficultyFocus": "Hard",
+    "version": "v1"
+  },
+  {
+    "slug": "paytm",
+    "company": "Paytm",
+    "industryGroup": "Fintech & E-Commerce",
+    "roleTracks": [
+      "Software Engineer",
+      "QA Engineer"
+    ],
+    "hiringType": "On-Campus / Off-Campus",
+    "logoLetter": "P",
+    "difficultyFocus": "Medium",
+    "version": "v1"
+  }
+]

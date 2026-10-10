@@ -1,0 +1,45 @@
+name: Campus OS Security & Quality Gates CI
+
+on:
+  push:
+    branches: ["main", "fix/**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Install functions dependencies
+        run: npm ci
+        working-directory: functions
+
+      - name: Repository security & prohibited-reference verification
+        run: npm run security:verify
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Frontend unit & environment-contract tests
+        run: npm test
+
+      - name: Frontend production build
+        run: npm run build
+
+      - name: Functions build
+        run: npm run build
+        working-directory: functions

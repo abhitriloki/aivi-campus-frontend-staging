@@ -1,0 +1,46 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isAuth() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isVerified() && request.auth.uid == userId;
+    }
+
+    function isPlatformAdmin() {
+      return isVerified() && (
+        request.auth.token.role == 'platform_admin' ||
+        request.auth.token.role == 'admin'
+      );
+    }
+
+    function isTenantStaff(tenantId) {
+      return isVerified() &&
+        request.auth.token.tenantId != null &&
+        request.auth.token.tenantId == tenantId &&
+        (request.auth.token.role == 'tenant_admin' ||
+         request.auth.token.role == 'placement_director' ||
+         request.auth.token.role == 'tpo' ||
+         request.auth.token.role == 'coordinator');
+    }
+
+    // Student resume PDFs in storage: read-only by owner, platform admin, or same-tenant staff. Writes via Admin SDK only.
+    match /tenants/{tenantId}/resumes/{userId}/{filename} {
+      allow read: if isOwner(userId) || isPlatformAdmin() || isTenantStaff(tenantId);
+      allow write: if false;
+    }
+
+    // Export ZIP packages: read-only by platform admin or same-tenant staff. Writes via Admin SDK only.
+    match /exports/{tenantId}/{filename} {
+      allow read: if isPlatformAdmin() || isTenantStaff(tenantId);
+      allow write: if false;
+    }
+  }
+}
