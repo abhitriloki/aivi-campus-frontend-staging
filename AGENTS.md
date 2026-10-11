@@ -131,7 +131,7 @@ All functions run on `us-central1` using Firebase Functions v2:
 
 ## 4. 📍 Current Live State & Recent Shipments (Living Ledger)
 
-* **Last Updated:** 2026-10-10 16:30 IST (2026-10-10 11:00 UTC)  
+* **Last Updated:** 2026-10-11 02:45 IST (2026-10-10 21:15 UTC)  
 * **Active Git Branch:** `feat/new-ui-ux` (Figma Redesign Track · Isolated Local) / `compliance/dpdp` (Production/Staging Target)  
 * **Live URLs:**
   * Production: `https://aivicampus.com` (Firebase: `aivi-campus-prod`)
@@ -139,7 +139,12 @@ All functions run on `us-central1` using Firebase Functions v2:
   * Local Dev (New UI/UX): `http://localhost:5173` (`feat/new-ui-ux`)
 
 ### 📦 Recent Shipped Milestones:
-1. **2026-10-10 16:30 IST: Master Implementation: Commercial Onboarding Tier Alignment & Sovereign Rule 46 Statutory Tax Invoicing Workflow (`aivi-campus-os`):**
+1. **2026-10-11 03:15 IST: Figma Fidelity Pass — 5 Pages + Header/Footer Rethemed to Figma Light Design System (`aivi-campus-frontend-staging`):**
+   - **Root Cause**: The frontend was built dark-themed (`#0F1720` bg, teal `hsl(176)` accents) while the Figma "Campus OS" design system is light (`#f8fafc`/`#ffffff` page bg, blue primary `#1769ff`/`#2176ff`, Inter for UI + Plus Jakarta Sans for marketing headlines) — the alignment drift reported by Abhi.
+   - **Fix Applied (design-only, zero logic changes)**: `ForCollegesPage.tsx` (homepage) rethemed light per `screen-landing-page` (Figma hero copy *"Make every student Placement-ready."*, widget cards, Figma section order); `ContactConceptB.tsx` per `screen-contact-us` (Figma form card, trust points, reach-us card); `CampusDashboard.tsx` (TPO) per `screen-tpo-dashboard` (readiness ring, KPI band, 9-col roster); `DashboardHome.tsx` (student) per `screen-student-dashboard-complete` (KPI row, modules, progress chart card); `BrandedLogin.tsx` per both Figma sign-in screens; `CampusHeader.tsx`/`CampusFooter.tsx` rethemed light (Figma nav: Home / Platform / Command Center / Voice AI); Plus Jakarta Sans added to the font stack (`font-display`). All handlers, Firebase/auth calls, data bindings, validation, routes, and exports untouched.
+   - **Verification**: Static checks only (syntax + import hygiene); build validation deferred to Abhi per task scope.
+   - **Rollback Action**: `git checkout HEAD -- src/`
+2. **2026-10-10 16:30 IST: Master Implementation: Commercial Onboarding Tier Alignment & Sovereign Rule 46 Statutory Tax Invoicing Workflow (`aivi-campus-os`):**
    - **Root Cause & Forensic Diagnosis**:
      - *Onboarding Tier Mismatch*: The Provision New Campus modal in `PlatformAdminConsole.tsx` still featured legacy hardcoded tiers (`trial` with 500 seats) completely disconnected from our official 4-tier pitch deck commercial model (`Starter`, `Growth`, `Pro`, `University`).
      - *Missing Statutory Invoice Details & PO Flow*: Invoicing previously used dummy hardcoded parameters (`PO-2025-GOVT-09`, Lucknow, UP 09) without capturing official institution billing profiles (Legal entity name, GSTIN, State GST code, Campus address, Attention officer, Purchase Order number/date, or dual delivery modes). Colleges requiring statutory Rule 46 compliance (SAC 998314) or submitting physical/external PO tax invoices were not properly accommodated.

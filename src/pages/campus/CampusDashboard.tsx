@@ -7,13 +7,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
-  TrendingUp,
   Users,
   Briefcase,
   Award,
   AlertTriangle,
   RefreshCw,
   Download,
+  MoreHorizontal,
   Send,
   Sparkles,
   CheckCircle2,
@@ -21,17 +21,14 @@ import {
   Filter,
   FileText,
   ArrowRight,
-  Radar,
   Mic2,
   FolderLock,
-  ChevronRight,
   Zap,
   Crown,
   Building2,
   GraduationCap,
   BellRing,
   CalendarDays,
-  UserPlus,
   Upload,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -671,115 +668,110 @@ export default function CampusDashboard() {
       {/* Header */}
       <div className="stagger flex flex-col gap-5 xl:flex-row xl:items-stretch">
         {/* Greeting panel */}
-        <div className="relative flex-1 overflow-hidden rounded-2xl border border-white/60 bg-gradient-to-br from-[#101820] via-[#101820] to-[#143E3B] p-6 text-white shadow-[0_20px_50px_-24px_hsl(210_33%_10%/0.5)] lg:p-7">
+        <div className="relative flex-1 overflow-hidden rounded-2xl border border-slate-200/70 bg-white p-6 shadow-[0_10px_36px_-16px_rgba(33,118,255,0.25)] lg:p-7">
           <div className="pointer-events-none absolute inset-0">
-            <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-[radial-gradient(circle,hsl(176_52%_45%/0.35),transparent_70%)] blur-2xl" />
-            <div className="bg-grid-light absolute inset-0 opacity-50 [mask-image:radial-gradient(ellipse_70%_90%_at_0%_0%,black,transparent)]" />
+            <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-[#3b82f6]/15 blur-3xl" />
           </div>
           <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-[hsl(176_52%_62%)]">
+              <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-[#2176ff]">
                 <GraduationCap className="h-3.5 w-3.5" /> {branding.name && branding.name !== "AIVI Campus" ? `${branding.name} · Placement Cell` : "Placement & Training Cell"}
               </p>
-              <h1 className="mt-2 font-display text-[clamp(1.7rem,3vw,2.4rem)] font-semibold leading-tight tracking-[-0.015em]">
+              <h1 className="mt-2 font-sans text-2xl font-semibold leading-tight tracking-[-0.015em] text-[#0f172a]">
                 {isCoordinator
                   ? "CSE · Command Center"
                   : user?.displayName
                   ? `Welcome, ${user.displayName.trim().split(" ")[0]} 👋`
                   : "Welcome to Command Center 👋"}
               </h1>
-              <p className="mt-1.5 text-[13.5px] text-slate-400">
+              <p className="mt-1.5 text-base text-[#475569]">
                 {isCoordinator ? "Scoped view: CSE & IT branches." : `${branding.name} — one readiness number per student, week over week.`}
               </p>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2.5">
               <Button
-                variant="outline"
                 size="sm"
                 onClick={handleTriggerAggregation}
                 disabled={runningBackfill}
-                className="border-white/15 bg-white/[0.06] text-[12.5px] font-bold text-white hover:bg-white/[0.12] hover:text-white"
+                className="h-10 rounded-[10px] border border-[#dbe7ff] bg-[#f8fafc] px-4 text-sm font-semibold text-[#1769ff] shadow-sm hover:bg-[#eef4ff]"
               >
-                <RefreshCw className={`mr-1.5 h-3.5 w-3.5 ${runningBackfill ? "animate-spin" : ""}`} />
+                <RefreshCw className={`mr-1.5 h-4 w-4 ${runningBackfill ? "animate-spin" : ""}`} />
                 {runningBackfill ? "Aggregating…" : "Run AES aggregation"}
               </Button>
-              <Button size="sm" onClick={handleDownloadBoardReportPDF} disabled={!rollup} className="bg-gradient-to-b from-[hsl(176_52%_46%)] to-[hsl(178_58%_30%)] text-[12.5px] font-bold text-white shadow-glow">
-                <Download className="mr-1.5 h-3.5 w-3.5" /> Board report PDF
+              <Button size="sm" onClick={handleDownloadBoardReportPDF} disabled={!rollup} className="h-10 rounded-[10px] bg-[#2176ff] px-4 text-sm font-semibold text-white shadow-[0_6px_16px_-6px_rgba(33,118,255,0.6)] hover:bg-[#1769ff]">
+                <Download className="mr-1.5 h-4 w-4" /> Board Report PDF
               </Button>
             </div>
-          </div>
-
-          {/* mini quick chips */}
-          <div className="relative mt-6 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-            {quickLinks.map((l) => (
-              <button
-                key={l.label}
-                onClick={() => navigate(l.to)}
-                className="group flex items-center gap-2.5 rounded-xl border border-white/[0.08] bg-white/[0.04] p-3 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-[hsl(176_52%_45%/0.4)] hover:bg-white/[0.07]"
-              >
-                <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-lg border ${l.tint}`}>
-                  <l.icon className="h-4 w-4" />
-                </span>
-                <span className="min-w-0">
-                  <span className="block truncate text-[12px] font-bold text-white">{l.label}</span>
-                  <span className="block truncate text-[10px] font-medium text-slate-500">{l.desc}</span>
-                </span>
-                <ChevronRight className="ml-auto h-3.5 w-3.5 shrink-0 text-slate-600 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:text-white" />
-              </button>
-            ))}
           </div>
         </div>
 
         {/* AES ring card */}
-        <div className="flex w-full shrink-0 items-center gap-6 rounded-2xl border border-border/70 bg-card p-6 shadow-card xl:w-[300px]">
-          <div className="relative h-[128px] w-[128px] shrink-0">
-            <svg viewBox="0 0 128 128" className="h-full w-full -rotate-90">
-              <circle cx="64" cy="64" r="55" fill="none" stroke="hsl(38 16% 88%)" strokeWidth="10" />
-              <circle
-                cx="64" cy="64" r="55" fill="none"
-                stroke="url(#aesGrad)" strokeWidth="10" strokeLinecap="round"
-                strokeDasharray="345.5"
-                strokeDashoffset={345.5 * (1 - aesRing / 100)}
-                className="transition-all duration-1000"
-              />
-              <defs>
-                <linearGradient id="aesGrad" x1="0" y1="0" x2="128" y2="128">
-                  <stop stopColor="#2D8B86" />
-                  <stop offset="1" stopColor="#1C6B68" />
-                </linearGradient>
-              </defs>
-            </svg>
-            <div className="absolute inset-0 grid place-items-center text-center">
-              <div>
-                <p className="font-display text-[34px] font-bold leading-none text-[#101820] tabular-nums">
-                  {loading ? <RefreshCw className="mx-auto h-5 w-5 animate-spin text-slate-300" /> : <AnimatedNumber value={avgAes} decimals={1} />}
-                </p>
-                <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-400">Batch AES</p>
+        <div className="flex w-full shrink-0 items-center gap-5 rounded-xl border border-slate-200/60 bg-[#fcfeff] p-5 shadow-sm xl:w-[360px]">
+          <div className="shrink-0">
+            <p className="text-[12px] font-medium text-slate-900">Overall Readiness Score</p>
+            <div className="relative mx-auto mt-2 h-[84px] w-[84px]">
+              <svg viewBox="0 0 84 84" className="h-full w-full -rotate-90">
+                <circle cx="42" cy="42" r="36" fill="none" stroke="#e7efff" strokeWidth="9" />
+                <circle
+                  cx="42" cy="42" r="36" fill="none"
+                  stroke="#2176ff" strokeWidth="9" strokeLinecap="round"
+                  strokeDasharray="226.2"
+                  strokeDashoffset={226.2 * (1 - aesRing / 100)}
+                  className="transition-all duration-1000"
+                />
+              </svg>
+              <div className="absolute inset-0 grid place-items-center text-center">
+                <div>
+                  <p className="font-sans text-xl font-bold leading-none text-slate-900 tabular-nums">
+                    {loading ? <RefreshCw className="mx-auto h-4 w-4 animate-spin text-slate-300" /> : <AnimatedNumber value={avgAes} decimals={1} />}
+                  </p>
+                  <p className="text-[8px] font-normal text-[#64748b]">/100</p>
+                </div>
               </div>
             </div>
           </div>
-          <div className="min-w-0">
-            <div className="flex items-center gap-1.5">
-              <TrendingUp className="h-4 w-4 text-emerald-600" />
-              <p className="text-[13px] font-bold text-emerald-700">{isCustomTenant && avgAes === 0 ? "New cohort" : "+6.2 pts"}</p>
-            </div>
-            <p className="mt-1 text-[12px] leading-relaxed text-slate-500">{isCustomTenant && avgAes === 0 ? "Readiness baseline" : "vs last academic year baseline"}</p>
-            <div className="mt-3 space-y-1.5">
-              <div className="flex items-center justify-between text-[11px] font-bold">
-                <span className="text-slate-500">7-day active</span>
-                <span className="text-slate-800 tabular-nums">{totalStudentsCount > 0 ? (r.activeStudents7d || 0) : 0} / {totalStudentsCount}</span>
-              </div>
-              <div className="h-1.5 overflow-hidden rounded-full bg-slate-100">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-[#4DC7BE] to-[#2D8B86]"
-                  style={{
-                    width: `${totalStudentsCount > 0 ? Math.min(100, ((r.activeStudents7d || 0) / totalStudentsCount) * 100) : 0}%`,
-                  }}
-                />
-              </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-semibold text-[#2176ff]">{isCustomTenant && avgAes === 0 ? "New cohort" : "+6.2pts"}</p>
+            <p className="text-[10px] font-light text-[#7b7b7b]">{isCustomTenant && avgAes === 0 ? "Readiness baseline" : "Vs last Academic Year"}</p>
+            <div className="mt-3 space-y-2">
+              {[
+                { label: "Skills", pct: totalStudentsCount > 0 ? Math.min(100, Math.round((((liveInterviewDone ?? r.funnel.interviewDone) || 0) / totalStudentsCount) * 100)) : 0, track: "bg-[#dceaff]", fill: "bg-[#2176ff]" },
+                { label: "Resume", pct: derived.pct, track: "bg-[#e5dcff]", fill: "bg-[#7c5cff]" },
+                { label: "Portfolio", pct: totalStudentsCount > 0 ? Math.min(100, Math.round((derived.verified / totalStudentsCount) * 100)) : 0, track: "bg-[#fff4dc]", fill: "bg-[#ebad42]" },
+              ].map((b) => (
+                <div key={b.label} className="flex items-center gap-2">
+                  <span className="w-11 shrink-0 text-[10px] font-medium text-[#27282a]">{b.label}</span>
+                  <div className={`h-1.5 flex-1 overflow-hidden rounded-full ${b.track}`}>
+                    <div className={`h-full rounded-full ${b.fill} transition-all duration-700`} style={{ width: `${b.pct}%` }} />
+                  </div>
+                  <span className="w-8 shrink-0 text-right text-[10px] font-semibold text-slate-700 tabular-nums">{b.pct}%</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Quick nav cards */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {quickLinks.map((l, i) => {
+          const tint = ["#5491ff", "#2176ff", "#7c5cff", "#ec623d"][i % 4];
+          return (
+            <button
+              key={l.label}
+              onClick={() => navigate(l.to)}
+              className="group relative overflow-hidden rounded-2xl p-4 text-left text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+              style={{ backgroundColor: tint }}
+            >
+              <l.icon className="pointer-events-none absolute -bottom-4 -right-4 h-20 w-20 text-white/15" />
+              <span className="relative grid h-11 w-11 place-items-center rounded-full bg-white shadow-sm" style={{ color: tint }}>
+                <l.icon className="h-5 w-5" />
+              </span>
+              <span className="relative mt-3 block text-[13px] font-semibold text-white">{l.label}</span>
+              <span className="relative mt-0.5 block truncate text-[11px] font-light text-white/85">{l.desc}</span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Quota banner */}
@@ -815,7 +807,7 @@ export default function CampusDashboard() {
                   <div className="inline-flex items-center gap-2 rounded-full bg-[#2D8B86]/20 px-3 py-1 text-xs font-bold text-[#1C6B68]">
                     <Sparkles className="h-3.5 w-3.5" /> First-Time Campus Setup
                   </div>
-                  <h3 className="mt-2 font-display text-lg font-bold text-[#101820]">
+                  <h3 className="mt-2 font-sans text-lg font-bold text-[#101820]">
                     Welcome to your Campus Intelligence OS!
                   </h3>
                   <p className="text-xs text-slate-600 mt-0.5">
@@ -878,220 +870,172 @@ export default function CampusDashboard() {
             {[
               {
                 icon: Users,
-                label: "Students onboarded",
+                label: "Student Onboard",
                 value: <AnimatedNumber value={totalStudentsCount} />,
-                hint: "Verified college roster",
-                delta: isCustomTenant ? (studentRows.length ? `${studentRows.length} enrolled` : "No students yet") : "+3.2% vs last AY",
-                tint: "text-primary bg-primary/10 border-primary/20",
-                spark: !isCustomTenant,
-              },
-              {
-                icon: FileSpreadsheet,
-                label: "Resumes analyzed",
-                value: <span><AnimatedNumber value={derived.pct} />%</span>,
-                hint: `${derived.analyzed} ATS & JD-fit complete · ${derived.verified} verified`,
-                delta: isCustomTenant ? `${derived.verified} QR-sealed & verified` : "131 QR-sealed & verified",
-                tint: "text-sky-600 bg-sky-500/10 border-sky-500/20",
-                bar: derived.pct,
+                hint: totalStudentsCount > 0 ? `Out of ${totalStudentsCount} enrolled` : "No students yet — import roster",
+                dark: true,
               },
               {
                 icon: Briefcase,
                 label: "Active drives",
                 value: <AnimatedNumber value={isCustomTenant ? drivesCount : r.drivesActive} />,
                 hint: "Corporate pipelines live",
-                delta: isCustomTenant ? (drivesCount ? `${drivesCount} active` : "0 live drives") : "46 offers avg ₹4.8L",
-                tint: "text-amber-600 bg-amber-500/10 border-amber-500/20",
-                spark: !isCustomTenant,
+                iconBg: "bg-[#f59e0b]",
+              },
+              {
+                icon: FileSpreadsheet,
+                label: "Resumes Analyzed",
+                value: <span><AnimatedNumber value={derived.pct} />%</span>,
+                hint: `${derived.analyzed} ATS & JD-fit complete · ${derived.verified} verified`,
+                iconBg: "bg-[#2176ff]",
               },
               {
                 icon: BellRing,
                 label: "At-risk students",
                 value: <AnimatedNumber value={totalStudentsCount === 0 ? 0 : (atRiskStudents.length || (isCustomTenant ? 0 : r.aesBands["<40"]))} />,
                 hint: "AES below 40 — rescue queue",
-                delta: totalStudentsCount > 0 && atRiskStudents.length ? "auto-nudges ready" : "watchlist clear",
-                tint: "text-rose-600 bg-rose-500/10 border-rose-500/20",
-                spark: false,
-                danger: Boolean(totalStudentsCount > 0 && (atRiskStudents.length || r.aesBands["<40"])),
+                iconBg: "bg-[#ef4444]",
               },
-            ].map((s, i) => (
+            ].map((s) => (
               <div
                 key={s.label}
-                className="group relative overflow-hidden rounded-2xl border border-border/70 bg-card p-5 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover"
-                style={{ animationDelay: `${i * 60}ms` }}
+                className={`relative overflow-hidden rounded-[20px] p-5 transition-all duration-300 hover:-translate-y-0.5 ${
+                  s.dark
+                    ? "bg-[#101a35] text-white shadow-[0_14px_34px_-16px_rgba(16,26,53,0.55)]"
+                    : "border border-slate-200/70 bg-white text-slate-900 shadow-sm hover:shadow-md"
+                }`}
               >
-                <div className="flex items-start justify-between">
-                  <span className={`grid h-10 w-10 place-items-center rounded-xl border ${s.tint}`}>
-                    <s.icon className="h-4.5 w-4.5" />
+                <div className="flex items-start justify-between gap-2">
+                  <p className={`text-base font-semibold ${s.dark ? "text-white" : "text-[#68738a]"}`}>{s.label}</p>
+                  <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full shadow-sm ${s.dark ? "bg-white text-[#101a35]" : `${s.iconBg} text-white`}`}>
+                    <s.icon className="h-4 w-4" />
                   </span>
-                  {"spark" in s && s.spark && (
-                    <span className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-600">
-                      <TrendingUp className="h-3 w-3" /> trend
-                    </span>
-                  )}
                 </div>
-                <p className="mt-4 font-display text-[32px] font-bold leading-none tracking-[-0.01em] text-[#101820] tabular-nums">{s.value}</p>
-                <p className="mt-1.5 text-[11px] font-bold uppercase tracking-[0.1em] text-slate-400">{s.label}</p>
-                <p className="mt-1 text-[11.5px] font-medium text-slate-500">{s.hint}</p>
-                {"bar" in s && s.bar !== undefined && (
-                  <div className="mt-2.5 h-1 overflow-hidden rounded-full bg-slate-100">
-                    <div className="h-full rounded-full bg-gradient-to-r from-sky-500 to-[#2D8B86]" style={{ width: `${s.bar}%` }} />
-                  </div>
-                )}
-                <p className={`mt-2 text-[10.5px] font-bold ${s.danger ? "text-rose-600" : "text-emerald-600"}`}>{s.delta}</p>
+                <p className={`mt-3 font-sans text-[28px] font-bold leading-none tracking-[-0.01em] tabular-nums ${s.dark ? "text-white" : "text-[#101a35]"}`}>{s.value}</p>
+                <p className={`mt-2 text-[10px] font-normal ${s.dark ? "text-white/70" : "text-[#68738a]"}`}>{s.hint}</p>
               </div>
             ))}
           </div>
 
           {/* Insights + Funnel row */}
+          {/* AES distribution + rescue row */}
           <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
-            {/* Funnel */}
-            <Card className="xl:col-span-7">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <div>
-                  <CardTitle className="flex items-center gap-2">
-                    <span className="grid h-7 w-7 place-items-center rounded-lg bg-[linear-gradient(135deg,#12B5A2,#1C6B68)] text-white shadow-sm">
-                      <Radar className="h-3.5 w-3.5" />
-                    </span>
-                    Student readiness funnel
-                  </CardTitle>
-                  <CardDescription>Batch 2026 · where students drop between consent and offer</CardDescription>
-                </div>
-                <Badge variant="soft" className="shrink-0">Live</Badge>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3.5">
-                  {[
-                    { key: "consent", label: "Consent collected", n: totalStudentsCount === 0 ? 0 : (r.funnel.consent || totalStudentsCount), color: "from-[#101820] to-[#2D8B86]" },
-                    { key: "firstAnalysis", label: "First AI analysis", n: totalStudentsCount === 0 ? 0 : r.funnel.firstAnalysis, color: "from-[#2D8B86] to-[#2D8B86]" },
-                    { key: "resumeRebuilt", label: "Resume rebuilt", n: totalStudentsCount === 0 ? 0 : r.funnel.resumeRebuilt, color: "from-[#2D8B86] to-[#2D8B86]" },
-                    { key: "interviewDone", label: "Mock interview done", n: totalStudentsCount === 0 ? 0 : (liveInterviewDone != null ? Math.max(liveInterviewDone, isCustomTenant ? 0 : r.funnel.interviewDone) : r.funnel.interviewDone), color: "from-[#12B5A2] to-[#4DC7BE]" },
-                    { key: "verified", label: "Resume verified", n: totalStudentsCount === 0 ? 0 : (derived.verified || r.funnel.verified), color: "from-[#2D8B86] to-[#4DC7BE]" },
-                    { key: "placed", label: "Offered", n: totalStudentsCount === 0 ? 0 : r.funnel.placed, color: "from-amber-500 to-amber-300" },
-                  ].map((f) => {
-                    const cohortMax = totalStudentsCount > 0 ? totalStudentsCount : Math.max(f.n, 1);
-                    const pct = cohortMax > 0 ? Math.min(100, Math.round((f.n / cohortMax) * 100)) : 0;
-                    return (
-                      <div key={f.key} className="flex items-center gap-3">
-                        <span className="w-[150px] shrink-0 text-[11.5px] font-bold text-slate-600">{f.label}</span>
-                        <div className="relative h-3.5 flex-1 overflow-hidden rounded-full bg-slate-100">
-                          <div
-                            className={`absolute inset-y-0 left-0 rounded-full bg-gradient-to-r ${f.color} transition-all duration-1000`}
-                            style={{ width: `${pct}%` }}
-                          />
-                        </div>
-                        <span className="w-14 shrink-0 text-right font-mono text-[12.5px] font-bold text-slate-700 tabular-nums">{f.n}</span>
-                        <span className="w-8 shrink-0 text-right text-[10px] font-bold text-slate-400">{pct}%</span>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-[hsl(177_51%_31%/0.18)] bg-[hsl(177_51%_31%/0.05)] p-3.5">
-                  <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                  <p className="text-[12px] leading-relaxed text-slate-600">
-                    <strong className="text-slate-800">AI insight:</strong>{" "}
-                    {isCustomTenant
-                      ? "Onboard your cohort via Student Roster or run student invites to unlock cohort AES diagnostics and drive recommendations."
-                      : "the biggest drop is resume→interview (22%). Adding one voice-AI mock sprint for ECE could recover ~14 of the 39 gap before the Tata Elxsi drive."}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* At risk + AES bands */}
-            <div className="space-y-4 xl:col-span-5">
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="flex items-center gap-2">
-                    <span className="grid h-7 w-7 place-items-center rounded-lg border border-rose-500/25 bg-rose-500/10 text-rose-600">
-                      <AlertTriangle className="h-3.5 w-3.5" />
-                    </span>
-                    AES distribution
-                  </CardTitle>
-                  <Badge variant="soft">{totalStudentsCount} students</Badge>
-                </CardHeader>
-                <CardContent>
-                  {(() => {
-                    const totalStudents = totalStudentsCount;
-                    return (
-                      <div className="flex h-3 w-full overflow-hidden rounded-full bg-slate-100">
-                        <div className="h-full bg-rose-400" style={{ width: `${totalStudents > 0 ? (r.aesBands["<40"] / totalStudents) * 100 : 0}%` }} />
-                        <div className="h-full bg-amber-400" style={{ width: `${totalStudents > 0 ? (r.aesBands["40-60"] / totalStudents) * 100 : 0}%` }} />
-                        <div className="h-full bg-sky-400" style={{ width: `${totalStudents > 0 ? (r.aesBands["60-75"] / totalStudents) * 100 : 0}%` }} />
-                        <div className="h-full bg-emerald-500" style={{ width: `${totalStudents > 0 ? (r.aesBands["75+"] / totalStudents) * 100 : 0}%` }} />
-                      </div>
-                    );
-                  })()}
-                  <div className="mt-3 grid grid-cols-2 gap-2">
-                    {[
-                      { label: "75+ · industry ready", n: totalStudentsCount > 0 ? r.aesBands["75+"] : 0, dot: "bg-emerald-500" },
-                      { label: "60–75 · proficient", n: totalStudentsCount > 0 ? r.aesBands["60-75"] : 0, dot: "bg-sky-400" },
-                      { label: "40–60 · developing", n: totalStudentsCount > 0 ? r.aesBands["40-60"] : 0, dot: "bg-amber-400" },
-                      { label: "< 40 · at risk", n: totalStudentsCount > 0 ? r.aesBands["<40"] : 0, dot: "bg-rose-400" },
-                    ].map((b) => (
-                      <div key={b.label} className="flex items-center gap-2 rounded-lg bg-slate-50 px-2.5 py-2">
-                        <span className={`h-2 w-2 rounded-full ${b.dot}`} />
-                        <span className="flex-1 truncate text-[10.5px] font-semibold text-slate-600">{b.label}</span>
-                        <span className="font-mono text-[12px] font-bold text-slate-800 tabular-nums">{b.n}</span>
-                      </div>
-                    ))}
+            <div className="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm xl:col-span-7">
+              <h3 className="font-sans text-xl font-semibold text-[#252525]">AES Distribution</h3>
+              <p className="mt-1 text-xs font-light text-[#7b7b7b]">See where your students stand and where intervention is needed</p>
+              <div className="mt-4 flex items-center justify-between">
+                <p className="text-xs font-semibold text-[#252525]">Readiness Distribution (AES)</p>
+                <p className="text-xs font-bold text-black tabular-nums">{totalStudentsCount} Students</p>
+              </div>
+              <div className="mt-2 flex h-6 w-full overflow-hidden rounded-[5px] bg-slate-100">
+                <div className="h-full bg-[#01b32c] transition-all duration-700" style={{ width: `${totalStudentsCount > 0 ? (r.aesBands["75+"] / totalStudentsCount) * 100 : 0}%` }} />
+                <div className="h-full bg-[#2176ff] transition-all duration-700" style={{ width: `${totalStudentsCount > 0 ? (r.aesBands["60-75"] / totalStudentsCount) * 100 : 0}%` }} />
+                <div className="h-full bg-[#ebad42] transition-all duration-700" style={{ width: `${totalStudentsCount > 0 ? (r.aesBands["40-60"] / totalStudentsCount) * 100 : 0}%` }} />
+                <div className="h-full bg-[#ff2121] transition-all duration-700" style={{ width: `${totalStudentsCount > 0 ? (r.aesBands["<40"] / totalStudentsCount) * 100 : 0}%` }} />
+              </div>
+              <div className="mt-2.5 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {[
+                  { label: "Industry Ready", n: r.aesBands["75+"], dot: "bg-[#01b32c]" },
+                  { label: "Proficient", n: r.aesBands["60-75"], dot: "bg-[#2176ff]" },
+                  { label: "Developing", n: r.aesBands["40-60"], dot: "bg-[#ebad41]" },
+                  { label: "At Risk", n: r.aesBands["<40"], dot: "bg-[#ff2121]" },
+                ].map((b) => (
+                  <div key={b.label}>
+                    <p className="flex items-center gap-1.5 text-[11px] font-semibold text-black tabular-nums">
+                      <span className={`h-1.5 w-1.5 rounded-full ${b.dot}`} />
+                      {totalStudentsCount > 0 ? Math.round((b.n / totalStudentsCount) * 100) : 0}%
+                    </p>
+                    <p className="mt-0.5 text-[10px] font-semibold text-[#64748b]">{b.label}</p>
                   </div>
-                </CardContent>
-              </Card>
+                ))}
+              </div>
+            </div>
 
-              {/* At-risk rescue queue */}
-              <Card className="border-rose-500/20">
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="flex items-center gap-2">
-                    <span className="grid h-7 w-7 place-items-center rounded-lg bg-[linear-gradient(135deg,#E2543E,#B33A27)] text-white shadow-sm">
-                      <BellRing className="h-3.5 w-3.5" />
-                    </span>
-                    Rescue queue
-                  </CardTitle>
-                  <Badge variant="destructive" className="font-bold">{atRiskStudents.length} flagged</Badge>
-                </CardHeader>
-                <CardContent className="space-y-2.5">
-                  {atRiskStudents.length === 0 && (
-                    <div className="flex items-center gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/[0.06] p-3.5 text-[13px] font-semibold text-emerald-700">
-                      <CheckCircle2 className="h-4 w-4" /> No students below the AES 40 threshold. Nice work!
-                    </div>
-                  )}
-                  {atRiskStudents.map((s) => (
-                    <div key={s.userId} className="group rounded-xl border border-border/70 bg-slate-50/60 p-3 transition hover:border-rose-500/25 hover:bg-white">
-                      <div className="flex items-center gap-2.5">
-                        <Avatar className="h-8 w-8">
-                          <AvatarFallback className="bg-rose-500/10 text-[10px] font-bold text-rose-600">{initialsOf(s.fullName)}</AvatarFallback>
-                        </Avatar>
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-[12.5px] font-bold text-slate-800">{s.fullName}</p>
-                          <p className="font-mono text-[10px] font-medium text-slate-400">{s.enrollmentNo} · {s.branch} · {s.lastActive}</p>
-                        </div>
-                        <Badge className={scoreTone(s.aes)}>{s.aes} AES</Badge>
-                        <Button
-                          size="icon-sm"
-                          variant="outline"
-                          title="Dispatch AI nudge"
-                          disabled={nudgingId === s.userId}
-                          onClick={() => handleNudge(s.userId, s.fullName)}
-                          className="shrink-0 border-primary/25 text-primary hover:bg-primary/10"
-                        >
-                          {nudgingId === s.userId ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
-                        </Button>
+            <div className="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm xl:col-span-5">
+              <div className="flex items-center justify-between gap-2">
+                <h3 className="font-sans text-xl font-bold text-[#252525]">Rescue queue</h3>
+                <button
+                  onClick={() => navigate("/campus/students")}
+                  className="shrink-0 rounded-full bg-[#ececec] px-3 py-1.5 text-[11px] font-normal text-[#64748b] transition hover:bg-[#dcdcdc]"
+                >
+                  Open Full Roster
+                </button>
+              </div>
+              <div className="mt-4 space-y-3">
+                {atRiskStudents.length === 0 && (
+                  <div className="flex items-center gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/[0.06] p-3.5 text-[13px] font-semibold text-emerald-700">
+                    <CheckCircle2 className="h-4 w-4 shrink-0" /> No students below the AES 40 threshold. Nice work!
+                  </div>
+                )}
+                {atRiskStudents.map((s) => (
+                  <div key={s.userId} className="rounded-xl border border-slate-200/70 bg-white p-3">
+                    <div className="flex items-center gap-2.5">
+                      <Avatar className="h-9 w-9">
+                        <AvatarFallback className="bg-[#ffa6a6] text-[11px] font-medium text-[#ff2121]">{initialsOf(s.fullName)}</AvatarFallback>
+                      </Avatar>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate font-sans text-base font-medium text-slate-900">{s.fullName}</p>
+                        <p className="truncate text-[10px] font-light text-[#7b7b7b]">{s.enrollmentNo} · {s.branch} · {s.lastActive}</p>
                       </div>
+                      <span className="shrink-0 rounded-full bg-[#ffa6a6] px-2.5 py-1 text-[10px] font-medium text-[#ff2121] tabular-nums">{s.aes} AES</span>
+                    </div>
+                    <Button
+                      size="sm"
+                      onClick={() => handleNudge(s.userId, s.fullName)}
+                      disabled={nudgingId === s.userId}
+                      className="mt-2.5 h-9 w-full rounded-full bg-[#2176ff] text-[11px] font-semibold text-white shadow-sm hover:bg-[#1769ff]"
+                    >
+                      {nudgingId === s.userId ? <RefreshCw className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <Send className="mr-1.5 h-3.5 w-3.5" />}
+                      {nudgingId === s.userId ? "Sending…" : "Nudge"}
+                    </Button>
+                    {s.missingComponents.length > 0 && (
                       <div className="mt-2 flex flex-wrap gap-1">
                         {s.missingComponents.map((m) => (
                           <span key={m} className="rounded-md border border-rose-200 bg-rose-50 px-1.5 py-0.5 text-[9.5px] font-bold text-rose-700">{m}</span>
                         ))}
                       </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Readiness funnel */}
+          <div className="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm">
+            <h3 className="font-sans text-xl font-semibold text-[#252525]">Student Readiness Funnel</h3>
+            <p className="mt-1 text-xs font-light text-[#7b7b7b]">Batch 2026 · where students drop between consent and offer</p>
+            <div className="mt-6 grid grid-cols-3 gap-2 sm:grid-cols-6 sm:gap-3">
+              {[
+                { key: "consent", label: "Consent collected", n: totalStudentsCount === 0 ? 0 : (r.funnel.consent || totalStudentsCount) },
+                { key: "firstAnalysis", label: "First AI analysis", n: totalStudentsCount === 0 ? 0 : r.funnel.firstAnalysis },
+                { key: "resumeRebuilt", label: "Resume rebuilt", n: totalStudentsCount === 0 ? 0 : r.funnel.resumeRebuilt },
+                { key: "interviewDone", label: "Mock interview done", n: totalStudentsCount === 0 ? 0 : (liveInterviewDone != null ? Math.max(liveInterviewDone, isCustomTenant ? 0 : r.funnel.interviewDone) : r.funnel.interviewDone) },
+                { key: "verified", label: "Resume verified", n: totalStudentsCount === 0 ? 0 : (derived.verified || r.funnel.verified) },
+                { key: "placed", label: "Offered", n: totalStudentsCount === 0 ? 0 : r.funnel.placed },
+              ].map((f) => {
+                const cohortMax = totalStudentsCount > 0 ? totalStudentsCount : Math.max(f.n, 1);
+                const pct = cohortMax > 0 ? Math.min(100, Math.round((f.n / cohortMax) * 100)) : 0;
+                return (
+                  <div key={f.key} className="flex flex-col items-center px-1">
+                    <span className="h-2.5 w-2.5 rounded-full bg-[#2176ff]" />
+                    <div className="mt-1.5 flex h-32 w-12 items-end overflow-hidden rounded-lg bg-[#eef2f7] sm:w-14">
+                      <div className="w-full rounded-lg bg-gradient-to-t from-[#2176ff] to-[#8dbcff] transition-all duration-1000" style={{ height: `${pct}%` }} />
                     </div>
-                  ))}
-                  <button
-                    onClick={() => navigate("/campus/students")}
-                    className="flex w-full items-center justify-center gap-1 rounded-xl border border-dashed border-border py-2 text-[11.5px] font-bold text-slate-500 transition hover:border-primary/40 hover:text-primary"
-                  >
-                    Open full roster <ArrowRight className="h-3.5 w-3.5" />
-                  </button>
-                </CardContent>
-              </Card>
+                    <p className="mt-2 text-center text-[10px] font-normal leading-tight text-[#7b7b7b]">{f.label}</p>
+                    <p className="text-[11px] font-bold text-[#575757] tabular-nums">{pct}%</p>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="mt-6 flex items-start gap-2.5 rounded-xl border border-[#dbe7ff] bg-[#f0f6ff] p-3.5">
+              <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-[#2176ff]" />
+              <p className="text-[12px] leading-relaxed text-slate-600">
+                <strong className="text-slate-800">AI insight:</strong>{" "}
+                {isCustomTenant
+                  ? "Onboard your cohort via Student Roster or run student invites to unlock cohort AES diagnostics and drive recommendations."
+                  : "the biggest drop is resume→interview (22%). Adding one voice-AI mock sprint for ECE could recover ~14 of the 39 gap before the Tata Elxsi drive."}
+              </p>
             </div>
           </div>
 
@@ -1154,20 +1098,30 @@ export default function CampusDashboard() {
           </Card>
 
           {/* Roster table */}
-          <Card className="overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between border-b border-border/60 bg-gradient-to-r from-white to-[hsl(177_51%_31%/0.03)] py-4">
+          {/* Roster section header */}
+          <div className="flex items-center gap-3">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[#bfd7ff]">
+              <Users className="h-5 w-5 text-[#2176ff]" />
+            </span>
+            <div>
+              <h2 className="font-sans text-xl font-semibold text-[#252525]">Student readiness roster</h2>
+              <p className="text-xs font-light text-[#7b7b7b]">Per-student AES, activity telemetry and resume state</p>
+            </div>
+          </div>
+
+          {/* Roster card */}
+          <div className="overflow-hidden rounded-[20px] border border-slate-200/70 bg-white shadow-sm">
+            <div className="flex flex-row items-center justify-between gap-3 px-6 pt-5">
               <div>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-4.5 w-4.5 text-primary" /> Student readiness roster
-                  <Badge variant="soft">{filteredStudents.length}</Badge>
-                </CardTitle>
-                <CardDescription>Per-student AES, activity telemetry and resume state.</CardDescription>
+                <h3 className="font-sans text-xl font-bold text-[#0f172a]">Student Roster</h3>
+                <p className="mt-1 text-xs font-normal text-[#5f6b7c]">View student readiness, activity, and placement status.</p>
               </div>
-              <Button variant="ghost" size="sm" onClick={() => navigate("/campus/students")} className="hidden text-[12px] text-primary sm:flex">
-                Full directory <ArrowRight className="ml-1 h-3.5 w-3.5" />
-              </Button>
-            </CardHeader>
-            <CardContent className="p-0">
+              <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-[#edf4ff] px-3 py-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#2878ff]" />
+                <span className="text-[11px] font-semibold text-[#2878ff] tabular-nums">{filteredStudents.length} students</span>
+              </span>
+            </div>
+            <div className="mt-2 px-2 pb-2">
               {filteredStudents.length === 0 ? (
                 <div className="p-14 text-center text-muted-foreground">
                   <FileText className="mx-auto mb-3 h-10 w-10 opacity-30" />
@@ -1178,79 +1132,113 @@ export default function CampusDashboard() {
                       : "Reset batch / branch / score to see the roster again."}
                   </p>
                   {isCustomTenant && studentRows.length === 0 && (
-                    <Button size="sm" onClick={() => navigate("/campus/students")} className="mt-4 bg-primary text-white">
+                    <Button size="sm" onClick={() => navigate("/campus/students")} className="mt-4 bg-[#2176ff] text-white hover:bg-[#1769ff]">
                       Go to Student Roster
                     </Button>
                   )}
                 </div>
               ) : (
                 <div className="overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Student</TableHead>
-                        <TableHead>Branch</TableHead>
-                        <TableHead>Batch</TableHead>
-                        <TableHead>Readiness score</TableHead>
-                        <TableHead>Last active</TableHead>
-                        <TableHead>Resume</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {filteredStudents.slice(0, 8).map((student) => (
-                        <TableRow key={student.userId}>
-                          <TableCell>
-                            <div className="flex items-center gap-2.5">
-                              <Avatar className="h-8 w-8">
-                                <AvatarFallback className="bg-[hsl(177_51%_31%/0.1)] text-[10px] font-bold text-primary">{initialsOf(student.fullName)}</AvatarFallback>
-                              </Avatar>
-                              <div>
-                                <p className="text-[13px] font-bold text-slate-800">{student.fullName}</p>
-                                <p className="font-mono text-[10.5px] text-slate-400">{student.enrollmentNo}</p>
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="bg-[#f7f9fc]">
+                        {["Student", "Enrollment No.", "Branch", "Batch", "AES Score", "Readiness", "Last Active", "Placement Status", "Action"].map((h, i) => (
+                          <th key={h} className={`whitespace-nowrap px-3 py-3 text-left text-[10px] font-semibold text-[#8a96a8] ${i === 0 ? "pl-6" : ""} ${i === 8 ? "pr-6 text-right" : ""}`}>{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredStudents.slice(0, 8).map((student) => {
+                        const bands = [
+                          { avatar: "bg-[#dceaff] text-[#1f66d8]", bar: "bg-[#22b573]", dot: "bg-[#22b573]", pill: "bg-[#eaf9f1] text-[#22b573]", label: "Industry Ready" },
+                          { avatar: "bg-[#e9f1ff] text-[#2878ff]", bar: "bg-[#2176ff]", dot: "bg-[#2176ff]", pill: "bg-[#e9f1ff] text-[#2878ff]", label: "Proficient" },
+                          { avatar: "bg-[#fff4dc] text-[#d38200]", bar: "bg-[#d38200]", dot: "bg-[#d38200]", pill: "bg-[#fdf3e0] text-[#b97a0c]", label: "Developing" },
+                          { avatar: "bg-[#ffe3e3] text-[#ff2121]", bar: "bg-[#ff2121]", dot: "bg-[#ff2121]", pill: "bg-[#fdecec] text-[#ff2121]", label: "At Risk" },
+                        ][student.aes >= 75 ? 0 : student.aes >= 60 ? 1 : student.aes >= 40 ? 2 : 3];
+                        const ps = (student.placementStatus || "unplaced").toLowerCase();
+                        const plc = ps === "placed"
+                          ? { pill: "bg-[#e9f9ef] text-[#0a9c2e]", dot: "bg-[#01b32c]", label: "Placed" }
+                          : ps === "offered"
+                          ? { pill: "bg-[#edf4ff] text-[#2878ff]", dot: "bg-[#2878ff]", label: "Offered" }
+                          : ps === "higher_studies"
+                          ? { pill: "bg-[#f3f6fa] text-[#475569]", dot: "bg-[#8a96a8]", label: "Higher Studies" }
+                          : ps === "opted_out"
+                          ? { pill: "bg-[#f3f6fa] text-[#475569]", dot: "bg-[#8a96a8]", label: "Opted Out" }
+                          : { pill: "bg-[#edf4ff] text-[#2878ff]", dot: "bg-[#2878ff]", label: "Interview Ready" };
+                        return (
+                          <tr key={student.userId} className="h-[60px] border-b border-slate-100 transition-colors last:border-0 hover:bg-slate-50/70">
+                            <td className="py-2 pl-6 pr-3">
+                              <div className="flex items-center gap-2.5">
+                                <Avatar className="h-9 w-9">
+                                  <AvatarFallback className={`${bands.avatar} text-[11px] font-bold`}>{initialsOf(student.fullName)}</AvatarFallback>
+                                </Avatar>
+                                <div>
+                                  <p className="whitespace-nowrap text-[13px] font-semibold text-[#0f172a]">{student.fullName}</p>
+                                  <p className="text-[10px] font-normal text-[#8a96a8]">{student.enrollmentNo}</p>
+                                </div>
                               </div>
-                            </div>
-                          </TableCell>
-                          <TableCell><Badge variant="outline" className="text-[10.5px]">{student.branch}</Badge></TableCell>
-                          <TableCell className="font-mono text-xs text-slate-500">{student.batch}</TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-2">
-                              <div className="h-1.5 w-16 overflow-hidden rounded-full bg-slate-100">
-                                <div
-                                  className={`h-full rounded-full ${student.aes >= 75 ? "bg-emerald-500" : student.aes >= 60 ? "bg-sky-500" : "bg-rose-500"}`}
-                                  style={{ width: `${Math.min(100, student.aes)}%` }}
-                                />
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-2 text-[11px] font-medium text-[#5f6b7c]">{student.enrollmentNo}</td>
+                            <td className="px-3 py-2">
+                              <span className="whitespace-nowrap rounded-full bg-[#f3f6fa] px-2.5 py-1 text-[11px] font-semibold text-[#475569]">{student.branch}</span>
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-2 text-[13px] font-medium text-[#5f6b7c] tabular-nums">{student.batch}</td>
+                            <td className="px-3 py-2">
+                              <p className="text-[13px] font-bold text-[#0f172a] tabular-nums">{student.aes}</p>
+                              <div className="mt-1 h-[3px] w-11 overflow-hidden rounded-full bg-[#f3f6fa]">
+                                <div className={`h-full rounded-full ${bands.bar}`} style={{ width: `${Math.min(100, student.aes)}%` }} />
                               </div>
-                              <Badge className={scoreTone(student.aes)}>{student.aes}</Badge>
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-xs text-slate-500">
-                            <span className="flex items-center gap-1.5">
-                              <span className={`h-1.5 w-1.5 rounded-full ${student.daysInactive <= 2 ? "bg-emerald-500" : student.daysInactive <= 7 ? "bg-amber-400" : "bg-rose-400"}`} />
-                              {student.lastActive}
-                            </span>
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant={student.resumeStatus === "Verified" ? "success" : student.resumeStatus === "Built" ? "soft" : "outline"}>
-                              {student.resumeStatus === "Verified" && <CheckCircle2 className="h-3 w-3" />}
-                              {student.resumeStatus}
-                            </Badge>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                            </td>
+                            <td className="px-3 py-2">
+                              <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-semibold ${bands.pill}`}>
+                                <span className={`h-1.5 w-1.5 rounded-full ${bands.dot}`} />
+                                {bands.label}
+                              </span>
+                            </td>
+                            <td className="px-3 py-2">
+                              <span className="flex items-center gap-1.5 whitespace-nowrap text-[11px] font-normal text-[#5f6b7c]">
+                                <span className={`h-1.5 w-1.5 rounded-full ${student.daysInactive <= 2 ? "bg-emerald-500" : student.daysInactive <= 7 ? "bg-amber-400" : "bg-rose-400"}`} />
+                                {student.lastActive}
+                              </span>
+                            </td>
+                            <td className="px-3 py-2">
+                              <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-semibold ${plc.pill}`}>
+                                <span className={`h-1.5 w-1.5 rounded-full ${plc.dot}`} />
+                                {plc.label}
+                              </span>
+                            </td>
+                            <td className="py-2 pl-3 pr-4 text-right">
+                              <button
+                                onClick={() => navigate("/campus/students")}
+                                title="Open in student directory"
+                                className="grid h-8 w-8 place-items-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                              >
+                                <MoreHorizontal className="h-4 w-4" />
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
                 </div>
               )}
-            </CardContent>
-          </Card>
+            </div>
+            <div className="flex items-center justify-between border-t border-slate-100 px-6 py-3.5">
+              <p className="text-[11px] font-normal text-[#5f6b7c]">Showing 1–{Math.min(8, filteredStudents.length)} of {totalStudentsCount} students</p>
+              <Button variant="ghost" size="sm" onClick={() => navigate("/campus/students")} className="text-xs font-semibold text-[#2176ff] hover:bg-[#eef4ff] hover:text-[#1769ff]">
+                Full directory <ArrowRight className="ml-1 h-3.5 w-3.5" />
+              </Button>
+            </div>
+          </div>
 
           {/* Department performance */}
-          <Card className="overflow-hidden">
-            <CardHeader className="border-b border-border/60 py-4">
-              <CardTitle className="flex items-center gap-2">
+          <Card className="overflow-hidden border-slate-200/70 bg-white shadow-sm">
+            <CardHeader className="border-b border-slate-100 py-4">
+              <CardTitle className="flex items-center gap-2 font-sans text-xl font-semibold text-[#252525]">
                 <Crown className="h-4.5 w-4.5 text-amber-500" /> Department baselines — AY 2025-26
               </CardTitle>
-              <CardDescription>Server-aggregated metrics from tenant_daily_stats · branch readiness heatmap.</CardDescription>
+              <CardDescription className="text-xs font-light text-[#7b7b7b]">Server-aggregated metrics from tenant_daily_stats · branch readiness heatmap.</CardDescription>
             </CardHeader>
             <CardContent className="p-0">
               {isCustomTenant && studentRows.length === 0 ? (

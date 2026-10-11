@@ -2,6 +2,21 @@
 
 All architectural decisions, production fixes, and environment changes are logged chronologically by Date & Time (UTC and IST) to guarantee long-term memory across engineering sessions.
 
+### [2026-10-10 21:40 UTC | 2026-10-11 03:10 IST] — Figma Fidelity Pass: 5 Pages + Header/Footer Rethemed to Figma Light Design System
+- **Timestamp**: 2026-10-10 21:40 UTC (2026-10-11 03:10 IST)
+- **Change Summary**: Design-only fidelity pass aligning the staging frontend with the Figma "Campus OS" design system (light theme `#f8fafc`/`#ffffff`, blue primary `#1769ff`/`#2176ff`, Inter + Plus Jakarta Sans). The codebase was dark-themed (`#0F1720`, teal accents) — the reported alignment drift.
+- **Files Changed** (design-only; zero logic/data/telemetry changes):
+  - `src/pages/ForCollegesPage.tsx`: full light retheme per `screen-landing-page` (Figma hero copy, widget cards, section order).
+  - `src/pages/ContactConceptB.tsx`: per `screen-contact-us` (form card, trust points, reach-us card). NOTE: copy uses Figma placeholders `hello@campusos.com` / `+91 98765 43210` — confirm real contact details before ship.
+  - `src/pages/campus/CampusDashboard.tsx`: per `screen-tpo-dashboard` (readiness ring, KPI band, 9-col roster).
+  - `src/pages/DashboardHome.tsx`: per `screen-student-dashboard-complete` (KPI row, modules, progress chart card).
+  - `src/pages/campus/BrandedLogin.tsx`: per both Figma sign-in screens.
+  - `src/components/CampusHeader.tsx` / `src/components/CampusFooter.tsx`: light retheme (Figma nav: Home / Platform / Command Center / Voice AI).
+  - `src/index.css`: added Inter + Plus Jakarta Sans to the Google Fonts import (Inter was declared in tailwind but never loaded).
+  - `tailwind.config.ts`: `font-display` now maps to Plus Jakarta Sans.
+- **Verification**: esbuild syntax parse clean on all 7 TSX files; JSX component/import resolution check clean; handlers, Firebase calls, data bindings, routes untouched. Build validation deferred to Abhi.
+- **Rollback**: `git checkout HEAD -- src/`
+
 ### [2026-10-10 11:00 UTC | 2026-10-10 16:30 IST] — Master Implementation: Commercial Onboarding Tier Alignment & Sovereign Rule 46 Statutory Tax Invoicing Workflow (`aivi-campus-os`)
 - **Timestamp**: 2026-10-10 11:00 UTC (2026-10-10 16:30 IST)
 - **Change Summary**: Successfully addressed user feedback on campus provisioning alignment and tax invoice generation requirements:

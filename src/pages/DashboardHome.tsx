@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import InsightCard from "../components/InsightCard";
 import PlanUsageBanner from "../components/PlanUsageBanner";
 import {
   FileText,
@@ -18,6 +17,10 @@ import {
   PenTool,
   Clock3,
   History,
+  LayoutGrid,
+  BarChart3,
+  ChevronRight,
+  ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -54,6 +57,24 @@ const analysisLabels: Record<string, string> = {
   portfolio: "Portfolio Analyzer",
   linkedin: "LinkedIn Analyzer",
 };
+
+// Figma (screen-student-dashboard-complete): per-module icon tile tints
+const moduleTileStyles: Record<string, { bg: string; fg: string }> = {
+  resume: { bg: "#fef2f2", fg: "#ef4444" },
+  job_fit: { bg: "#fef2f2", fg: "#ef4444" },
+  builder: { bg: "#fef2f2", fg: "#ef4444" },
+  roadmap: { bg: "#fff7ed", fg: "#ea580c" },
+  interview: { bg: "#fef2f2", fg: "#ef4444" },
+  promotion: { bg: "#fff7ed", fg: "#ea580c" },
+  portfolio: { bg: "#fef2f2", fg: "#ef4444" },
+};
+
+// Figma: recent-run icon tiles cycle through three styles
+const runTileStyles = [
+  { bg: "#fef2f2", fg: "#e88f00" },
+  { bg: "#8a38f5", fg: "#ffffff" },
+  { bg: "#01b32c", fg: "#ffffff" },
+];
 
 const DashboardHome = () => {
   const { user, tenant } = useAuth();
@@ -233,45 +254,17 @@ const DashboardHome = () => {
 
   return (
     <div className="space-y-6">
+      {/* Figma: title block — Inter 32/600 #000 + Inter 16/400 #000 */}
       <div>
         <motion.h1
-          className="text-2xl font-bold text-[#112031]"
+          className="text-[32px] font-semibold leading-[1.2] text-black"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
         >
           Career Intelligence Dashboard
         </motion.h1>
-        <p className="mt-1 text-[#66727C]">Welcome back. Your latest insights are shown below.</p>
+        <p className="mt-1 text-base text-black">Welcome back. Your latest insights are shown below.</p>
       </div>
-      
-      {isCampusUser && (
-        <div className="rounded-2xl border border-[#169C8F]/30 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-5 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full bg-[#169C8F]/20 text-[#169C8F] text-xs font-bold border border-[#169C8F]/40">
-                {branding?.name ? `${branding.name} — Placement Portal` : "Institutional Placement Portal"}
-              </span>
-
-            </div>
-            <h3 className="text-xl font-extrabold text-white">Institutional Resume Vault & Placement Drives</h3>
-            <p className="text-xs text-slate-300">Submit your AI-audited resume for TPO verification, college seal & active placement drives.</p>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <Link to="/dashboard/vault">
-              <Button className="bg-[#169C8F] hover:bg-[#128277] text-white font-bold text-xs">
-                <FolderLock className="h-4 w-4 mr-1.5" />
-                Open Resume Vault
-              </Button>
-            </Link>
-            <Link to="/dashboard/drives">
-              <Button variant="outline" className="border-slate-600 text-slate-200 hover:bg-slate-800 text-xs font-bold">
-                <BriefcaseBusiness className="h-4 w-4 mr-1.5" />
-                Placement Drives
-              </Button>
-            </Link>
-          </div>
-        </div>
-      )}
 
       {renderTrialBanner()}
       {renderActivationButton()}
@@ -282,6 +275,306 @@ const DashboardHome = () => {
         onOpenChange={setShowActivationModal}
         onSuccess={fetchPlanInfo}
       />
+
+      {/* Figma: kpi-row — card 1 blue gradient w/ white text, cards 2-3 white */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <motion.div
+          className="rounded-[20px] border border-[#e5eaf2] bg-[linear-gradient(180deg,#2176ff_0%,#1769ff_100%)] p-5 shadow-[0_6px_18px_rgba(16,26,53,0.031)]"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0 }}
+        >
+          <div className="flex items-start justify-between gap-4">
+            <p className="text-xs font-semibold text-white">Overall Score</p>
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white">
+              <Zap className="h-4 w-4 text-[#2176ff]" />
+            </div>
+          </div>
+          <div className="mt-3 flex items-baseline gap-1.5">
+            <span className="text-[40px] font-semibold leading-none text-white">{overallScore ?? "—"}</span>
+            {overallScore != null && <span className="text-[10px] font-normal text-white/90">/100</span>}
+          </div>
+          <p className="mt-2 text-[10px] text-white/90">
+            {overallScore ? "From latest resume analysis" : "Complete an analysis to see"}
+          </p>
+        </motion.div>
+
+        <motion.div
+          className="rounded-[20px] border border-white bg-white p-5 shadow-[0_6px_18px_rgba(16,26,53,0.031)]"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <div className="flex items-start justify-between gap-4">
+            <p className="text-xs font-semibold text-[#64748b]">Skills Tracked</p>
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#2176ff]">
+              <Target className="h-4 w-4 text-white" />
+            </div>
+          </div>
+          <div className="mt-3 flex items-baseline gap-1.5">
+            <span className="text-[40px] font-semibold leading-none text-black">{skillsCount ?? "—"}</span>
+          </div>
+          <p className="mt-2 text-[10px] text-[#64748b]">
+            {skillsCount ? "Detected From Resume" : "Upload resume to detect"}
+          </p>
+        </motion.div>
+
+        <Link to="/dashboard/promotion" className="block">
+          <motion.div
+            className="rounded-[20px] border border-white bg-white p-5 shadow-[0_6px_18px_rgba(16,26,53,0.031)] transition-all duration-300 hover:-translate-y-0.5"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <p className="text-xs font-semibold text-[#64748b]">Promotion Readiness</p>
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#2176ff]">
+                <TrendingUp className="h-4 w-4 text-white" />
+              </div>
+            </div>
+            <div className="mt-3 flex items-baseline gap-1.5">
+              <span className="text-[40px] font-semibold leading-none text-black">
+                {moduleScores["promotion"] ? `${moduleScores["promotion"]}%` : "—"}
+              </span>
+            </div>
+            <p className="mt-2 text-[10px] text-[#64748b]">
+              {moduleScores["promotion"] ? "From promotion analysis" : "Click To Analyse"}
+            </p>
+          </motion.div>
+        </Link>
+      </div>
+
+      {/* Figma: IntelligenceModulesSection — white card, 2-col grid */}
+      <div className="rounded-2xl border border-[#e2e8f0] bg-white p-6">
+        <div className="flex items-center gap-3">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#eff6ff]">
+            <LayoutGrid className="h-4 w-4 text-[#2563eb]" />
+          </div>
+          <div>
+            <h2 className="text-sm font-bold text-[#0f172a]">Intelligence Modules</h2>
+            <p className="text-xs text-[#94a3b8]">Explore AI-powered tools to analyze, improve and accelerate your career journey.</p>
+          </div>
+        </div>
+
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          {modules.map((mod, i) => {
+            const tile = moduleTileStyles[mod.type] ?? { bg: "#eff6ff", fg: "#2563eb" };
+            return (
+              <Link key={mod.path} to={mod.path} className="block">
+                <motion.div
+                  className="flex items-center gap-3 rounded-2xl border border-[#e2e8f0] p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#c7d7f5] hover:shadow-[0_12px_28px_-18px_rgba(33,118,255,0.25)]"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.12 + i * 0.06 }}
+                >
+                  <div
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                    style={{ backgroundColor: tile.bg }}
+                  >
+                    <mod.icon className="h-5 w-5" style={{ color: tile.fg }} />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-xs font-bold text-[#0f172a]">{mod.title}</h3>
+                    <p className="mt-0.5 text-[11px] text-[#94a3b8]">{mod.desc}</p>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-2">
+                    {moduleScores[mod.type] != null ? (
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-[#2176ff]">
+                        <span className="font-display text-xs font-bold text-[#1769ff]">{moduleScores[mod.type]}</span>
+                      </div>
+                    ) : (
+                      <span className="rounded-full bg-[#2176ff] px-2 py-[3px] text-[10px] font-bold text-white">New</span>
+                    )}
+                    <ChevronRight className="h-4 w-4 text-[#3b82f6]" />
+                  </div>
+                </motion.div>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Figma: Frame 471 — career progress chart + recent analyzer runs */}
+      <div className="flex flex-col gap-4 lg:flex-row">
+        <motion.div
+          className="rounded-2xl border border-[#e2e8f0] bg-white p-6 lg:flex-[1.3]"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.14 }}
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#eff6ff]">
+                <BarChart3 className="h-4 w-4 text-[#2563eb]" />
+              </div>
+              <div>
+                <h2 className="text-sm font-bold text-[#0f172a]">Your Career Progress</h2>
+                <p className="text-xs text-[#94a3b8]">Track your improvement across key dimensions.</p>
+              </div>
+            </div>
+            <div
+              aria-hidden="true"
+              className="flex shrink-0 items-center gap-2 rounded-lg border border-[#e2e8f0] bg-[#f8fafc] px-3 py-1.5"
+            >
+              <span className="text-xs font-semibold text-[#334155]">Overall Score</span>
+              <ChevronDown className="h-3.5 w-3.5 text-[#94a3b8]" />
+            </div>
+          </div>
+
+          <div aria-hidden="true" className="mt-5">
+            <svg viewBox="0 0 500 200" className="h-auto w-full">
+              <defs>
+                <linearGradient id="dashBarGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#6fa6ff" />
+                  <stop offset="100%" stopColor="#5495ff" />
+                </linearGradient>
+              </defs>
+              {[15, 55, 95, 135, 175].map((y) => (
+                <line key={y} x1="0" y1={y} x2="500" y2={y} stroke="#cfd6de" strokeWidth="1" />
+              ))}
+              {[
+                { x: 54.5, h: 80 },
+                { x: 174.5, h: 121 },
+                { x: 294.5, h: 150 },
+                { x: 414.5, h: 62 },
+              ].map((b, idx) => (
+                <rect
+                  key={idx}
+                  x={b.x}
+                  y={175 - b.h}
+                  width="31"
+                  height={b.h}
+                  rx="6"
+                  fill="url(#dashBarGrad)"
+                  opacity="0.85"
+                />
+              ))}
+              <path
+                d="M70,80 C110,60 150,45 190,42 C230,39 270,20 310,22 C350,24 390,70 430,98"
+                fill="none"
+                stroke="#2176ff"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              />
+              {[
+                [70, 80],
+                [190, 42],
+                [310, 22],
+                [430, 98],
+              ].map(([cx, cy], idx) => (
+                <circle key={idx} cx={cx} cy={cy} r="4.5" fill="#2176ff" stroke="#ffffff" strokeWidth="2" />
+              ))}
+            </svg>
+            <div className="mt-2 flex justify-between px-1">
+              {["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].map((m) => (
+                <span
+                  key={m}
+                  className={
+                    m === "Oct"
+                      ? "font-display text-[11px] font-bold text-[#2563eb]"
+                      : "font-display text-[11px] font-medium text-[#94a3b8]"
+                  }
+                >
+                  {m}
+                </span>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
+        {recentHistoryCards.length > 0 && (
+          <motion.div
+            className="rounded-2xl border border-[#e2e8f0] bg-white p-6 lg:flex-1"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.16 }}
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#2176ff]">
+                <History className="h-4 w-4 text-white" />
+              </div>
+              <div>
+                <h2 className="text-sm font-bold text-[#0f172a]">Recent analyzer runs</h2>
+                <p className="text-xs text-[#94a3b8]">Your latest analysis history and scores in one place.</p>
+              </div>
+            </div>
+
+            <div className="mt-5 space-y-4">
+              {recentHistoryCards.map((item, index) => {
+                const tile = runTileStyles[index % runTileStyles.length];
+                return (
+                  <motion.div
+                    key={item.id}
+                    className="flex items-center gap-3 rounded-xl border border-[#e2e8f0] p-3"
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 + index * 0.04 }}
+                  >
+                    <div
+                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+                      style={{ backgroundColor: tile.bg }}
+                    >
+                      <FileText className="h-4 w-4" style={{ color: tile.fg }} />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-xs font-bold text-[#1e293b]">{item.title}</p>
+                      <div className="mt-1 flex items-center gap-1.5">
+                        <Clock3 className="h-3 w-3 text-[#94a3b8]" />
+                        <span className="text-[11px] text-[#94a3b8]">{formatDate(item.createdAt)}</span>
+                      </div>
+                    </div>
+                    {item.score != null ? (
+                      <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[#d4e3ff]">
+                        <span className="font-display text-[11px] font-bold text-[#2176ff]">{item.score}</span>
+                      </div>
+                    ) : (
+                      <span className="shrink-0 rounded-md bg-[#d4e3ff] px-2 py-[3px] font-display text-[10px] font-bold text-[#2176ff]">
+                        Saved
+                      </span>
+                    )}
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </div>
+
+      {/* Figma: vault Section — light theme (was dark slate), blue CTAs */}
+      {isCampusUser && (
+        <div className="relative overflow-hidden rounded-2xl border border-[#e2e8f0] bg-[linear-gradient(90deg,#ffffff_0%,#eff6ff_50%,#f8fafc_100%)] p-6 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[#3b82f6] opacity-40 blur-[64px]"
+          />
+          <div className="relative flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="space-y-2">
+              <span className="inline-block rounded-full border border-[#cfe0ff] bg-[#eff6ff] px-2.5 py-1 text-[10px] font-semibold text-[#2176ff]">
+                {branding?.name ? `${branding.name} — Placement Portal` : "Institutional Placement Portal"}
+              </span>
+              <h3 className="text-2xl font-semibold text-[#0f172a]">Institutional Resume Vault & Placement Drives</h3>
+              <p className="text-base text-[#475569]">Submit your AI-audited resume for TPO verification, college seal & active placement drives.</p>
+            </div>
+            <div className="flex shrink-0 items-center gap-3">
+              <Link to="/dashboard/vault">
+                <Button className="h-10 rounded-[10px] bg-[linear-gradient(90deg,#2563eb_0%,#3b82f6_100%)] px-5 text-sm font-semibold text-[#fefcff] hover:brightness-110">
+                  <FolderLock className="mr-1.5 h-4 w-4" />
+                  Open Resume Vault
+                </Button>
+              </Link>
+              <Link to="/dashboard/drives">
+                <Button
+                  variant="outline"
+                  className="h-10 rounded-[10px] border-[#1769ff]/40 bg-[#f8fafc] px-5 text-sm font-semibold text-[#1769ff] hover:bg-[#eef4ff] hover:text-[#1769ff]"
+                >
+                  <BriefcaseBusiness className="mr-1.5 h-4 w-4" />
+                  Placement Drives
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="rounded-[1.6rem] border border-[#E7ECEF] bg-[linear-gradient(90deg,#FFFDF9_0%,#F4FBFB_100%)] px-5 py-4 shadow-[0_18px_44px_-28px_rgba(17,32,49,0.14)]">
         <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
@@ -312,111 +605,6 @@ const DashboardHome = () => {
       </div>
 
       <PlanUsageBanner />
-
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <InsightCard
-          title="Overall Score"
-          value={overallScore ?? "—"}
-          subtitle={overallScore ? "From latest resume analysis" : "Complete an analysis to see"}
-          icon={Zap}
-          delay={0}
-        />
-        <InsightCard
-          title="Skills Tracked"
-          value={skillsCount ?? "—"}
-          subtitle={skillsCount ? "Detected from resume" : "Upload resume to detect"}
-          icon={Target}
-          delay={0.1}
-        />
-        <Link to="/dashboard/promotion">
-          <InsightCard
-            title="Promotion Readiness"
-            value={moduleScores["promotion"] ? `${moduleScores["promotion"]}%` : "—"}
-            subtitle={moduleScores["promotion"] ? "From promotion analysis" : "Click to run analysis"}
-            icon={TrendingUp}
-            delay={0.2}
-          />
-        </Link>
-      </div>
-
-      {recentHistoryCards.length > 0 && (
-        <motion.div
-          className="rounded-[1.9rem] border border-[#E7ECEF] bg-white/94 p-6 shadow-[0_18px_44px_-28px_rgba(17,32,49,0.14)]"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.16 }}
-        >
-          <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(180deg,#EFFBFA_0%,#FFF4EF_100%)] text-[#FF6D4A]">
-              <History className="h-5 w-5" />
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold text-[#112031]">Recent analyzer runs</h2>
-              <p className="text-sm text-[#66727C]">Your latest analysis history and scores in one place.</p>
-            </div>
-          </div>
-
-          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-            {recentHistoryCards.map((item, index) => (
-              <motion.div
-                key={item.id}
-                className="rounded-[1.5rem] border border-[#E7ECEF] bg-[#FCFBF8] p-4"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 + index * 0.04 }}
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-sm font-semibold text-[#112031]">{item.title}</p>
-                    <div className="mt-2 flex items-center gap-2 text-xs text-[#7B8892]">
-                      <Clock3 className="h-3.5 w-3.5" />
-                      {formatDate(item.createdAt)}
-                    </div>
-                  </div>
-                  <div className="rounded-full bg-[#EFFBFA] px-3 py-1 text-xs font-semibold text-[#169C8F]">
-                    {item.score != null ? item.score : "Saved"}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      )}
-
-      <div>
-        <h2 className="mb-4 text-lg font-semibold text-[#112031]">Intelligence Modules</h2>
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {modules.map((mod, i) => (
-            <Link key={mod.path} to={mod.path}>
-              <motion.div
-                className="group rounded-[1.6rem] border border-[#E7ECEF] bg-white/94 p-5 shadow-[0_18px_44px_-28px_rgba(17,32,49,0.14)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#D5E6E3] hover:shadow-[0_22px_50px_-28px_rgba(17,32,49,0.16)]"
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.12 + i * 0.06 }}
-              >
-                <div className="flex items-start gap-4">
-                  <div className="rounded-2xl bg-[linear-gradient(180deg,#EFFBFA_0%,#FFF4EF_100%)] p-3 text-[#FF6D4A]">
-                    <mod.icon className="h-5 w-5" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="text-sm font-semibold text-[#112031]">{mod.title}</h3>
-                    <p className="mt-1 text-xs text-[#66727C]">{mod.desc}</p>
-                  </div>
-                  <div className="shrink-0">
-                    {moduleScores[mod.type] != null ? (
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#24B7A9] bg-[#EFFBFA]">
-                        <span className="text-sm font-bold text-[#169C8F]">{moduleScores[mod.type]}</span>
-                      </div>
-                    ) : (
-                      <span className="rounded-full bg-[#FFF4EF] px-2.5 py-1 text-xs font-semibold text-[#FF6D4A]">New</span>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
-            </Link>
-          ))}
-        </div>
-      </div>
 
       {!overallScore && (
         <motion.div

@@ -21,14 +21,9 @@ import {
   ShieldCheck,
   AlertCircle,
   RefreshCw,
-  Fingerprint,
-  Radar,
-  Mic2,
-  Award,
   Sparkles,
   ArrowLeft,
   KeyRound,
-  Check,
   ShieldAlert,
   GraduationCap,
   Briefcase,
@@ -703,9 +698,9 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
 
   if (loadingBranding) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-[#0F1720]">
-        <div className="relative mb-6 h-12 w-12 animate-spin rounded-full border-2 border-[hsl(176_52%_45%)] border-t-transparent [animation-duration:0.9s]" />
-        <p className="text-[13px] font-bold uppercase tracking-[0.2em] text-slate-500">Loading institutional portal…</p>
+      <div className="flex min-h-screen flex-col items-center justify-center bg-white">
+        <div className="relative mb-6 h-12 w-12 animate-spin rounded-full border-2 border-[#1769ff] border-t-transparent [animation-duration:0.9s]" />
+        <p className="text-[13px] font-bold uppercase tracking-[0.2em] text-slate-400">Loading institutional portal…</p>
       </div>
     );
   }
@@ -717,18 +712,22 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
 
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#0F1720] text-slate-100">
+    <div
+      className="relative min-h-screen overflow-hidden bg-white text-slate-900 [font-family:Inter,ui-sans-serif,system-ui,sans-serif]"
+      style={{ background: "radial-gradient(1100px 520px at 50% -8%, #dbeafe 0%, #f3f8ff 45%, #f8fafc 100%), #ffffff" }}
+    >
+
       {/* Platform Master Admin Live Preview Notice */}
       {isUserPlatformAdmin && tenantCode && (
-        <div className="relative z-30 flex items-center justify-between border-b border-amber-500/25 bg-amber-950/40 px-6 py-2.5 text-xs text-amber-200 backdrop-blur-md">
+        <div className="relative z-30 flex items-center justify-between border-b border-amber-200 bg-amber-50 px-6 py-2.5 text-xs text-amber-800">
           <div className="flex items-center gap-2">
-            <span className="flex h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
-            <span className="font-semibold text-amber-300">Platform Master Admin Preview Mode:</span>
+            <span className="flex h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
+            <span className="font-semibold text-amber-700">Platform Master Admin Preview Mode:</span>
             <span>Logged in as <strong>{user?.email}</strong>. Inspecting <strong>{tenantBranding?.name || tenantCode}</strong> portal.</span>
           </div>
           <Link
             to="/platform-admin"
-            className="flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-1 font-semibold text-amber-300 transition hover:bg-amber-500/20 hover:text-white"
+            className="flex items-center gap-1.5 rounded-lg border border-amber-300 bg-white px-3 py-1 font-semibold text-amber-700 transition hover:bg-amber-100"
           >
             <span>Return to Master Admin Console</span>
             <ArrowRight className="h-3 w-3" />
@@ -736,83 +735,62 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
         </div>
       )}
 
-      {/* ambient glow background */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-52 top-[-160px] h-[560px] w-[560px] rounded-full bg-[radial-gradient(closest-side,hsl(177_51%_36%/0.4),transparent)] blur-2xl" />
-        <div className="absolute bottom-[-220px] right-[-120px] h-[560px] w-[560px] rounded-full bg-[radial-gradient(closest-side,hsl(177_51%_38%/0.22),transparent)] blur-2xl" />
-        <div className="absolute inset-0 opacity-60 [background-image:linear-gradient(to_right,hsl(0_0%_100%/0.035)_1px,transparent_1px),linear-gradient(to_bottom,hsl(0_0%_100%/0.035)_1px,transparent_1px)] [background-size:52px_52px] [mask-image:radial-gradient(ellipse_90%_70%_at_50%_20%,black,transparent)]" />
-      </div>
-
       {/* top-left brand — official transparent AIVI Campus mark */}
       <Link
         to="/"
         className={`absolute left-6 ${isUserPlatformAdmin && tenantCode ? "top-16" : "top-6"} z-20 flex items-center gap-3 transition-transform hover:scale-[1.02]`}
       >
-        <CampusLogo onDark className="h-11 w-[170px]" imgClassName="h-9 w-full" />
+        <CampusLogo className="h-11 w-[170px]" imgClassName="h-9 w-full" />
       </Link>
       <Link
         to="/"
-        className={`absolute right-6 ${isUserPlatformAdmin && tenantCode ? "top-16" : "top-6"} z-20 flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-[12.5px] font-bold text-slate-300 backdrop-blur transition hover:border-white/25 hover:text-white`}
+        className={`absolute right-6 ${isUserPlatformAdmin && tenantCode ? "top-16" : "top-6"} z-20 flex items-center gap-1.5 rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-[12.5px] font-bold text-slate-500 shadow-sm backdrop-blur transition hover:border-slate-300 hover:text-slate-900`}
       >
         <ArrowLeft className="h-3.5 w-3.5" /> Back to site
       </Link>
 
-      <div className="relative z-10 mx-auto grid min-h-screen w-full max-w-[1240px] items-center gap-12 px-5 py-24 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
-        {/* Left showcase */}
-        <div className="hidden lg:block">
-          <motion.div initial={fade.initial} animate={fade.animate} transition={{ duration: 0.7 }}>
-            <p className="inline-flex items-center gap-2 rounded-full border border-[hsl(176_52%_45%/0.3)] bg-[hsl(176_52%_45%/0.08)] px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-[hsl(176_52%_62%)]">
-              <Fingerprint className="h-3.5 w-3.5" /> Institutional Single Sign-On
-            </p>
-            <h1 className="mt-6 max-w-xl font-display text-[clamp(2.4rem,4.4vw,3.9rem)] font-semibold leading-[1.04] tracking-[-0.02em] text-white">
-              Welcome back to your <span className="text-[hsl(176_52%_62%)]">campus command center.</span>
-            </h1>
-            <p className="mt-5 max-w-md text-[15px] leading-relaxed text-slate-400">
-              Every student's Employability Score, every drive pipeline, every NAAC export — in one place. Sign in to
-              continue where your placement cell left off.
-            </p>
-
-            {/* feature chips */}
-            <div className="mt-10 grid max-w-lg grid-cols-3 gap-3">
-              {[
-                { icon: Radar, t: "Live AES", s: "batch readiness" },
-                { icon: Mic2, t: "Voice AI", s: "Hindi mock rounds" },
-                { icon: Award, t: "NAAC packs", s: "one-click exports" },
-              ].map((f) => (
-                <div
-                  key={f.t}
-                  className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4 backdrop-blur transition hover:border-[hsl(176_52%_45%/0.35)]"
-                >
-                  <f.icon className="h-5 w-5 text-[hsl(176_52%_60%)]" />
-                  <p className="mt-2.5 text-[13px] font-bold text-white">{f.t}</p>
-                  <p className="text-[10.5px] font-medium text-slate-500">{f.s}</p>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Login Card */}
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1140px] items-center justify-center px-4 py-24 sm:px-8">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-          className="mx-auto w-full max-w-[460px]"
+          transition={{ duration: 0.7 }}
+          className="grid w-full overflow-hidden rounded-3xl border border-[#f1f5f9] bg-white shadow-[0_10px_30px_rgba(0,0,0,0.04),0_25px_60px_rgba(37,99,235,0.12)] lg:grid-cols-2"
         >
-          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#101820]/90 p-7 shadow-[0_60px_140px_-50px_rgba(0,0,0,0.9)] backdrop-blur-2xl sm:p-9">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[hsl(176_52%_55%/0.6)] to-transparent" />
-            <div className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full bg-[radial-gradient(circle,hsl(177_51%_36%/0.25),transparent_70%)] blur-xl" />
+          {/* Left — Brand introduction panel */}
+          <div className="relative hidden flex-col justify-center overflow-hidden border-r border-[#f1f5f9] bg-[linear-gradient(180deg,#f8fbff_0%,#eef5ff_100%)] p-12 lg:flex">
+            <div className="pointer-events-none absolute -right-24 top-1/4 h-80 w-80 rounded-full bg-[#dbeafe] blur-[64px]" />
+            <div className="pointer-events-none absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-[#bfdbfe] blur-[64px]" />
+            <motion.div
+              initial={fade.initial}
+              animate={fade.animate}
+              transition={{ duration: 0.7 }}
+              className="relative"
+            >
+              <CampusLogo className="h-14 w-[190px]" imgClassName="h-11 w-full" />
+              <span className="mt-10 inline-flex items-center rounded-full border border-[#bfdbfe] bg-[#eff6ff] px-3 py-1 text-[12px] font-semibold tracking-[0.025em] text-[#2563eb]">
+                #1 Student Placement Platform
+              </span>
+              <h1 className="mt-4 max-w-md text-[36px] font-extrabold leading-[40px] tracking-[-0.025em] text-[#0f172a]">
+                Welcome back to your campus command center.
+              </h1>
+              <p className="mt-4 max-w-md text-[16px] leading-6 text-[#64748b]">
+                Skill building, career guidance, and placement support — all in one platform. Join thousands of students who are building their future with CampusOS.
+              </p>
+            </motion.div>
+          </div>
 
+          {/* Right — Authentication panel */}
+          <div className="relative bg-white p-7 sm:p-14">
             {/* Active Account Switcher Banner */}
             {user && !((user as any).uid?.startsWith("demo-") || user.email === "director.tpo@sunrise.ac.in") && (
-              <div className="relative mb-6 rounded-2xl border border-[hsl(176_52%_45%/0.3)] bg-[hsl(176_52%_45%/0.08)] p-3.5 text-left">
+              <div className="relative mb-6 rounded-2xl border border-[#bfdbfe] bg-[#eff6ff] p-3.5 text-left">
                 <div className="flex items-center justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[hsl(176_52%_62%)]">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#2563eb]">
                       Active Session
                     </p>
-                    <p className="truncate text-[12.5px] font-bold text-white mt-0.5">{user.email}</p>
-                    <p className="text-[10.5px] text-slate-400">
+                    <p className="truncate text-[12.5px] font-bold text-[#0f172a] mt-0.5">{user.email}</p>
+                    <p className="text-[10.5px] text-slate-500">
                       {isUserPlatformAdmin
                         ? "Platform Master Administrator"
                         : "Institutional User"}
@@ -824,7 +802,7 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                         type="button"
                         size="sm"
                         onClick={() => navigate("/platform-admin")}
-                        className="h-7 rounded-lg bg-[hsl(176_52%_45%/0.25)] hover:bg-[hsl(176_52%_45%/0.4)] text-[hsl(176_52%_70%)] text-[11px] font-bold border border-[hsl(176_52%_45%/0.4)] cursor-pointer"
+                        className="h-7 rounded-lg bg-[#1769ff] hover:bg-[#0f5fe8] text-white text-[11px] font-bold cursor-pointer"
                       >
                         Console →
                       </Button>
@@ -833,7 +811,7 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                         type="button"
                         size="sm"
                         onClick={() => routeUserAfterAuth(user.email || "")}
-                        className="h-7 rounded-lg bg-[hsl(176_52%_45%/0.25)] hover:bg-[hsl(176_52%_45%/0.4)] text-[hsl(176_52%_70%)] text-[11px] font-bold border border-[hsl(176_52%_45%/0.4)] cursor-pointer"
+                        className="h-7 rounded-lg bg-[#1769ff] hover:bg-[#0f5fe8] text-white text-[11px] font-bold cursor-pointer"
                       >
                         Dashboard →
                       </Button>
@@ -846,7 +824,7 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                         await signOut();
                         toast.success("Signed out successfully. You can now sign in with a different account.");
                       }}
-                      className="h-7 rounded-lg border-white/10 hover:bg-white/10 text-slate-300 text-[11px] font-bold cursor-pointer"
+                      className="h-7 rounded-lg border-[#e2e8f0] bg-white hover:bg-slate-50 text-slate-600 text-[11px] font-bold cursor-pointer"
                     >
                       Sign Out
                     </Button>
@@ -859,14 +837,14 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
               <div>
                 {/* Find Your College Portal Gateway */}
                 <div className="relative text-center">
-                  <span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl border border-[hsl(176_52%_45%/0.35)] bg-gradient-to-b from-[#101820] to-[#101820] text-[hsl(176_52%_60%)] shadow-[0_12px_30px_-10px_hsl(177_51%_40%/0.6)]">
+                  <span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl border border-[#bfdbfe] bg-[#eff6ff] text-[#2563eb] shadow-[0_12px_30px_-10px_rgba(37,99,235,0.35)]">
                     <Building2 className="h-6 w-6" />
                   </span>
-                  <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.24em] text-[hsl(176_52%_62%)]">
+                  <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.24em] text-[#2563eb]">
                     INSTITUTIONAL GATEWAY
                   </p>
-                  <h1 className="mt-1.5 font-display text-[24px] font-semibold leading-tight text-white">Find Your College Portal</h1>
-                  <p className="mt-2 text-[13px] leading-relaxed text-slate-400">
+                  <h1 className="mt-1.5 text-[24px] font-semibold leading-tight text-[#0f172a]">Find Your College Portal</h1>
+                  <p className="mt-2 text-[13px] leading-relaxed text-[#64748b]">
                     Enter your institution's campus code or slug to access your accredited placement workspace.
                   </p>
                 </div>
@@ -898,10 +876,10 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                   <div>
                     <label
                       htmlFor="gateway-code"
-                      className="mb-1.5 flex items-center justify-between text-[12px] font-bold text-slate-300"
+                      className="mb-1.5 flex items-center justify-between text-[12px] font-semibold text-[#1e293b]"
                     >
                       Campus code or slug
-                      <span className="rounded bg-[hsl(176_52%_45%/0.1)] px-2 py-0.5 font-mono text-[10px] font-bold text-[hsl(176_52%_60%)]">
+                      <span className="rounded bg-[#eff6ff] px-2 py-0.5 font-mono text-[10px] font-semibold text-[#2563eb]">
                         e.g. sunrise-institute, rvce
                       </span>
                     </label>
@@ -914,14 +892,14 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                       autoFocus
                       required
                       disabled={isValidatingCode}
-                      className="h-12 rounded-xl border-white/10 bg-[#0F1720]/80 font-mono text-slate-100 placeholder:text-slate-600 hover:border-white/20 focus:border-[hsl(176_52%_50%/0.6)] text-[14px]"
+                      className="h-12 rounded-xl border-[#e2e8f0] bg-[#f8fafc] font-mono text-slate-900 placeholder:text-[#94a3b8] shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus-visible:border-[#1769ff] focus-visible:ring-[#1769ff]/20 text-[14px]"
                     />
                   </div>
 
                   <Button
                     type="submit"
                     disabled={isValidatingCode}
-                    className="group h-12 w-full rounded-xl bg-[linear-gradient(180deg,hsl(176_52%_46%),hsl(178_58%_29%))] text-[15px] font-bold text-white shadow-[0_16px_36px_-12px_hsl(176_52%_44%/0.9),inset_0_1px_0_hsl(0_0%_100%/0.3)] hover:-translate-y-0.5 hover:brightness-110"
+                    className="group h-12 w-full rounded-xl bg-[#1769ff] text-[15px] font-bold text-white shadow-[0_10px_24px_-8px_rgba(23,105,255,0.55)] hover:bg-[#0f5fe8]"
                   >
                     {isValidatingCode ? (
                       <span className="flex items-center gap-2">
@@ -936,19 +914,19 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                   </Button>
                 </form>
 
-                <div className="mt-6 rounded-xl border border-white/5 bg-white/[0.02] p-3.5 text-[12px] text-slate-400">
+                <div className="mt-6 rounded-xl border border-slate-100 bg-slate-50 p-3.5 text-[12px] text-slate-500">
                   <p className="flex items-start gap-2">
-                    <span className="font-semibold text-slate-300 shrink-0">• Placement Cell:</span>
+                    <span className="font-semibold text-slate-700 shrink-0">• Placement Cell:</span>
                     <span>Students & faculty must access their accredited college portal. Ask your TPO for your college URL.</span>
                   </p>
                 </div>
 
                 <div className="relative my-5">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-white/[0.08]" />
+                    <div className="w-full border-t border-[#e2e8f0]" />
                   </div>
                   <div className="relative flex justify-center">
-                    <span className="bg-[#101820] px-3 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                    <span className="bg-white px-3 text-[10px] font-bold uppercase tracking-[0.16em] text-[#94a3b8]">
                       platform administration
                     </span>
                   </div>
@@ -957,32 +935,32 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                 <button
                   type="button"
                   onClick={() => setIsPlatformAdminMode(true)}
-                  className="w-full flex items-center justify-center gap-1.5 text-[12px] font-semibold text-slate-400 hover:text-white transition py-1.5 cursor-pointer rounded-lg hover:bg-white/[0.04]"
+                  className="w-full flex items-center justify-center gap-1.5 text-[12px] font-semibold text-slate-500 hover:text-slate-900 transition py-1.5 cursor-pointer rounded-lg hover:bg-slate-50"
                 >
-                  <Lock className="h-3.5 w-3.5 text-[hsl(176_52%_55%)]" /> Platform Master Admin Sign In
+                  <Lock className="h-3.5 w-3.5 text-[#1769ff]" /> Platform Master Admin Sign In
                 </button>
               </div>
             ) : isNotFound ? (
               <div>
                 {/* Institution Not Found Card */}
                 <div className="relative text-center">
-                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-500/10 border border-rose-500/25 text-rose-400 shadow-lg">
+                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-50 border border-rose-200 text-rose-500 shadow-sm">
                     <AlertCircle className="h-7 w-7" />
                   </div>
-                  <span className="rounded-full border border-rose-500/30 bg-rose-500/10 px-3 py-1 font-mono text-[10px] font-bold tracking-[0.2em] text-rose-400">
+                  <span className="rounded-full border border-rose-200 bg-rose-50 px-3 py-1 font-mono text-[10px] font-bold tracking-[0.2em] text-rose-600">
                     CAMPUS NOT FOUND
                   </span>
-                  <h1 className="mt-3 font-display text-[22px] font-semibold leading-tight text-white">Institution Not Found</h1>
-                  <p className="mt-2 text-[13px] leading-relaxed text-slate-300 font-medium">
+                  <h1 className="mt-3 text-[22px] font-semibold leading-tight text-[#0f172a]">Institution Not Found</h1>
+                  <p className="mt-2 text-[13px] leading-relaxed text-slate-600 font-medium">
                     Institution not found. Please verify your campus code.
                   </p>
-                  <p className="mt-1 text-[12px] leading-relaxed text-slate-400">
-                    No accredited placement workspace was found matching code <span className="font-mono text-white bg-white/10 px-1.5 py-0.5 rounded">{slug}</span>.
+                  <p className="mt-1 text-[12px] leading-relaxed text-slate-500">
+                    No accredited placement workspace was found matching code <span className="font-mono text-[#0f172a] bg-slate-100 px-1.5 py-0.5 rounded">{slug}</span>.
                   </p>
                 </div>
 
-                <div className="mt-6 rounded-xl border border-white/10 bg-[#0F1720]/80 p-4 space-y-3">
-                  <label className="block text-[12px] font-bold text-slate-300 text-left">
+                <div className="mt-6 rounded-xl border border-[#e2e8f0] bg-[#f8fafc] p-4 space-y-3">
+                  <label className="block text-[12px] font-semibold text-[#1e293b] text-left">
                     Try a different campus code:
                   </label>
                   <div className="flex gap-2">
@@ -991,7 +969,7 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                       onChange={(e) => setCampusCodeInput(e.target.value.toLowerCase().trim())}
                       placeholder="e.g. sunrise-institute, rvce"
                       disabled={isValidatingCode}
-                      className="h-10 flex-1 rounded-xl border-white/10 bg-[#101820] font-mono text-[13px] text-slate-200 placeholder:text-slate-600"
+                      className="h-10 flex-1 rounded-xl border-[#e2e8f0] bg-white font-mono text-[13px] text-slate-900 placeholder:text-[#94a3b8] focus-visible:border-[#1769ff] focus-visible:ring-[#1769ff]/20"
                     />
                     <Button
                       type="button"
@@ -1016,7 +994,7 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                           setIsValidatingCode(false);
                         }
                       }}
-                      className="h-10 rounded-xl px-4 text-[13px] font-bold"
+                      className="h-10 rounded-xl px-4 text-[13px] font-bold bg-[#1769ff] hover:bg-[#0f5fe8] text-white"
                     >
                       {isValidatingCode ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : <>Go <ArrowRight className="h-3.5 w-3.5 ml-1" /></>}
                     </Button>
@@ -1030,7 +1008,7 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                       setCampusCodeInput("");
                       navigate("/campus/login");
                     }}
-                    className="w-full h-11 rounded-xl bg-white/10 hover:bg-white/15 text-[13.5px] font-bold text-white border border-white/10 transition cursor-pointer"
+                    className="w-full h-11 rounded-xl bg-slate-100 hover:bg-slate-200 text-[13.5px] font-bold text-slate-700 transition cursor-pointer"
                   >
                     <ArrowLeft className="h-4 w-4 mr-2" /> Back to College Gateway
                   </Button>
@@ -1040,27 +1018,27 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
               <div>
                 {/* Suspended Institution Card */}
                 <div className="relative text-center">
-                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 border border-amber-500/25 text-amber-400 shadow-lg">
+                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 border border-amber-200 text-amber-500 shadow-sm">
                     <ShieldAlert className="h-7 w-7" />
                   </div>
-                  <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 font-mono text-[10px] font-bold tracking-[0.2em] text-amber-400">
+                  <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 font-mono text-[10px] font-bold tracking-[0.2em] text-amber-600">
                     WORKSPACE SUSPENDED
                   </span>
-                  <h1 className="mt-3 font-display text-[22px] font-semibold leading-tight text-white">{name}</h1>
-                  <p className="mt-2 text-[13px] leading-relaxed text-slate-400">
+                  <h1 className="mt-3 text-[22px] font-semibold leading-tight text-[#0f172a]">{name}</h1>
+                  <p className="mt-2 text-[13px] leading-relaxed text-slate-500">
                     The placement workspace for this institution has been temporarily suspended by system governance. Active placement drives, mock interview labs, and student rosters are offline.
                   </p>
                 </div>
 
-                <div className="mt-6 rounded-xl border border-amber-500/20 bg-amber-500/[0.06] p-4 text-[12px] text-amber-200/90 text-left space-y-2">
-                  <p className="font-semibold text-amber-300">How to restore institutional access:</p>
+                <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-[12px] text-amber-800 text-left space-y-2">
+                  <p className="font-semibold text-amber-700">How to restore institutional access:</p>
                   <p className="flex items-start gap-2">
-                    <span className="text-amber-400 shrink-0">•</span>
+                    <span className="text-amber-500 shrink-0">•</span>
                     <span>Contact your campus Placement Cell or Dean of Academic Affairs.</span>
                   </p>
                   <p className="flex items-start gap-2">
-                    <span className="text-amber-400 shrink-0">•</span>
-                    <span>Reach out to AIVI Enterprise Support at <a href="mailto:hello@aivilabs.com" className="text-white underline font-medium">hello@aivilabs.com</a>.</span>
+                    <span className="text-amber-500 shrink-0">•</span>
+                    <span>Reach out to AIVI Enterprise Support at <a href="mailto:hello@aivilabs.com" className="text-[#0f172a] underline font-medium">hello@aivilabs.com</a>.</span>
                   </p>
                 </div>
 
@@ -1068,7 +1046,7 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                   <Button
                     type="button"
                     onClick={() => navigate("/campus/login")}
-                    className="w-full h-11 rounded-xl bg-white/10 hover:bg-white/15 text-[13.5px] font-bold text-white border border-white/10 transition cursor-pointer"
+                    className="w-full h-11 rounded-xl bg-slate-100 hover:bg-slate-200 text-[13.5px] font-bold text-slate-700 transition cursor-pointer"
                   >
                     <ArrowLeft className="h-4 w-4 mr-2" /> Enter Different Campus Code
                   </Button>
@@ -1081,31 +1059,31 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                     <button
                       type="button"
                       onClick={() => setIsPlatformAdminMode(false)}
-                      className="inline-flex items-center gap-1 text-[11.5px] font-semibold text-slate-400 hover:text-white mb-4 transition cursor-pointer"
+                      className="inline-flex items-center gap-1 text-[11.5px] font-semibold text-slate-500 hover:text-slate-900 mb-4 transition cursor-pointer"
                     >
                       <ArrowLeft className="h-3 w-3" /> {isGenericGateway ? "Back to College Search" : `Back to ${name} Sign In`}
                     </button>
                     <div className="relative text-center">
-                      <span className="mx-auto grid h-12 w-12 place-items-center rounded-2xl border border-[hsl(176_52%_45%/0.35)] bg-gradient-to-b from-[#101820] to-[#101820] text-[hsl(176_52%_60%)] shadow-md">
+                      <span className="mx-auto grid h-12 w-12 place-items-center rounded-2xl border border-[#bfdbfe] bg-[#eff6ff] text-[#2563eb] shadow-sm">
                         <Lock className="h-5 w-5" />
                       </span>
-                      <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.24em] text-[hsl(176_52%_62%)]">
+                      <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.24em] text-[#2563eb]">
                         SYSTEM CONTROL
                       </p>
-                      <h1 className="mt-1 font-display text-[22px] font-semibold leading-tight text-white">Master Admin Sign In</h1>
-                      <p className="mt-1.5 text-[12.5px] leading-relaxed text-slate-400">
+                      <h1 className="mt-1 text-[22px] font-semibold leading-tight text-[#0f172a]">Master Admin Sign In</h1>
+                      <p className="mt-1.5 text-[12.5px] leading-relaxed text-[#64748b]">
                         Sign in with authorized AIVI platform administrator credentials.
                       </p>
                     </div>
                   </div>
                 ) : (
                   <div>
-                    <div className="mb-3 flex items-center justify-between">
+                    <div className="mb-3 flex items-center justify-end">
                       <Link
                         to="/campus/login"
-                        className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-400 hover:text-slate-200 transition"
+                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1769ff] hover:underline transition"
                       >
-                        <ArrowLeft className="h-3 w-3" /> Change college
+                        <ArrowLeft className="h-3 w-3" /> Change College
                       </Link>
                     </div>
                     <div className="relative text-center">
@@ -1113,18 +1091,18 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                         <img
                           src={tenantBranding.branding.logoUrl}
                           alt={name}
-                          className="mx-auto h-14 w-14 rounded-2xl border border-white/10 bg-white p-1.5 object-contain shadow-lg"
+                          className="mx-auto h-14 w-14 rounded-2xl border border-[#e2e8f0] bg-white p-1.5 object-contain shadow-sm"
                         />
                       ) : (
-                        <span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl border border-[hsl(176_52%_45%/0.35)] bg-gradient-to-b from-[#101820] to-[#101820] text-[hsl(176_52%_60%)] shadow-[0_12px_30px_-10px_hsl(177_51%_40%/0.6)]">
+                        <span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl border border-[#bfdbfe] bg-[#eff6ff] text-[#2563eb] shadow-[0_12px_30px_-10px_rgba(37,99,235,0.35)]">
                           <Building2 className="h-6 w-6" />
                         </span>
                       )}
-                      <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.24em] text-[hsl(176_52%_62%)]">
+                      <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.24em] text-[#2563eb]">
                         {authMode === "register" ? "STUDENT SELF-REGISTRATION" : tenantBranding?.code && tenantBranding.code.trim() ? tenantBranding.code : "AIVI CAMPUS"}
                       </p>
-                      <h1 className="mt-1.5 font-display text-[24px] font-semibold leading-tight text-white">{name}</h1>
-                      <p className="mt-2 text-[13px] leading-relaxed text-slate-400">
+                      <h1 className="mt-1.5 text-[24px] font-semibold leading-tight text-[#0f172a]">{name}</h1>
+                      <p className="mt-2 text-[13px] leading-relaxed text-[#64748b]">
                         {authMode === "register"
                           ? "Create your student account to access your placement workspace."
                           : tenantBranding?.branding?.loginHeadline || "Sign in to access your campus career intelligence OS."}
@@ -1135,8 +1113,8 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
 
                 {/* sso error notice */}
                 {ssoError && (
-                  <div className="mt-5 space-y-2 rounded-xl border border-red-500/25 bg-red-500/[0.08] p-3.5 text-[12px] text-red-200">
-                    <p className="flex items-center gap-2 font-bold text-red-300">
+                  <div className="mt-5 space-y-2 rounded-xl border border-red-200 bg-red-50 p-3.5 text-[12px] text-red-700">
+                    <p className="flex items-center gap-2 font-bold text-red-600">
                       <AlertCircle className="h-4 w-4" /> Institutional SSO Notice / संस्थान लॉगिन त्रुटि
                     </p>
                     <p>{ssoError}</p>
@@ -1150,7 +1128,7 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                       type="button"
                       onClick={() => autofillAndLogin("tpo")}
                       disabled={submitting}
-                      className="flex items-center justify-center gap-1.5 rounded-xl border border-[hsl(176_52%_45%/0.3)] bg-[hsl(176_52%_45%/0.08)] px-3 py-2.5 text-[11.5px] font-bold text-[hsl(176_52%_66%)] transition hover:bg-[hsl(176_52%_45%/0.16)] cursor-pointer"
+                      className="flex items-center justify-center gap-1.5 rounded-xl border border-[#bfdbfe] bg-[#eff6ff] px-3 py-2.5 text-[11.5px] font-bold text-[#2563eb] transition hover:bg-[#dbeafe] cursor-pointer"
                     >
                       <Sparkles className="h-3.5 w-3.5" /> ⚡ TPO demo login
                     </button>
@@ -1158,7 +1136,7 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                       type="button"
                       onClick={() => autofillAndLogin("student")}
                       disabled={submitting}
-                      className="flex items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-[11.5px] font-bold text-slate-300 transition hover:bg-white/[0.09] cursor-pointer"
+                      className="flex items-center justify-center gap-1.5 rounded-xl border border-[#e2e8f0] bg-white px-3 py-2.5 text-[11.5px] font-bold text-slate-600 transition hover:bg-slate-50 cursor-pointer"
                     >
                       🎓 Student demo login
                     </button>
@@ -1171,16 +1149,16 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                     <Button
                       onClick={handleSsoLogin}
                       disabled={submitting}
-                      className="mt-4 h-11 w-full rounded-xl bg-[linear-gradient(120deg,#1C6B68,#2D8B86)] text-[14px] font-bold text-white shadow-[0_10px_28px_-10px_hsl(176_52%_50%/0.8)] hover:brightness-110"
+                      className="mt-4 h-11 w-full rounded-xl bg-[#1769ff] text-[14px] font-bold text-white shadow-[0_10px_24px_-8px_rgba(23,105,255,0.55)] hover:bg-[#0f5fe8]"
                     >
                       <ShieldCheck className="h-4 w-4" /> {tenantBranding.sso.buttonText || `Sign in with ${name}`}
                     </Button>
                     <div className="relative my-5">
                       <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-white/[0.08]" />
+                        <div className="w-full border-t border-[#e2e8f0]" />
                       </div>
                       <div className="relative flex justify-center">
-                        <span className="bg-[#101820] px-3 text-[10.5px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                        <span className="bg-white px-3 text-[10.5px] font-bold uppercase tracking-[0.16em] text-[#94a3b8]">
                           or with email
                         </span>
                       </div>
@@ -1189,52 +1167,51 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                 )}
 
                 {/* 3-Pill Role Selector (Student | TPO / Admin | Faculty) */}
-                {/* 3-Pill Role Selector (Student | TPO / Admin | Faculty) */}
                 {!isGenericGateway && !isPlatformAdminMode && authMode === "login" && (
                   <div className="relative mt-5 mb-4">
-                    <div className="grid grid-cols-3 gap-1 rounded-xl bg-white/[0.04] p-1 border border-white/10">
+                    <div className="grid grid-cols-3 gap-1 rounded-2xl bg-[#f1f5f9] p-1">
                       <button
                         type="button"
                         onClick={() => setSelectedRole("student")}
-                        className={`flex items-center justify-center gap-1.5 py-2 px-1 rounded-lg text-[12px] font-bold transition cursor-pointer ${
+                        className={`flex items-center justify-center gap-1.5 py-2 px-1 rounded-xl text-[12px] transition cursor-pointer ${
                           selectedRole === "student"
-                            ? "bg-[linear-gradient(180deg,hsl(176_52%_46%/0.35),hsl(178_58%_29%/0.35))] text-[hsl(176_52%_66%)] border border-[hsl(176_52%_45%/0.5)] shadow-sm"
-                            : "text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]"
+                            ? "bg-[#1769ff] text-white font-bold shadow-sm"
+                            : "text-[#475569] font-normal hover:text-slate-900"
                         }`}
                       >
-                        <GraduationCap className="h-3.5 w-3.5 shrink-0" />
+                        <GraduationCap className="h-4 w-4 shrink-0" />
                         <span className="truncate">Student</span>
                       </button>
 
                       <button
                         type="button"
                         onClick={() => setSelectedRole("tpo")}
-                        className={`flex items-center justify-center gap-1.5 py-2 px-1 rounded-lg text-[12px] font-bold transition cursor-pointer ${
+                        className={`flex items-center justify-center gap-1.5 py-2 px-1 rounded-xl text-[12px] transition cursor-pointer ${
                           selectedRole === "tpo"
-                            ? "bg-[linear-gradient(180deg,hsl(176_52%_46%/0.35),hsl(178_58%_29%/0.35))] text-[hsl(176_52%_66%)] border border-[hsl(176_52%_45%/0.5)] shadow-sm"
-                            : "text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]"
+                            ? "bg-[#1769ff] text-white font-bold shadow-sm"
+                            : "text-[#475569] font-normal hover:text-slate-900"
                         }`}
                       >
-                        <Briefcase className="h-3.5 w-3.5 shrink-0" />
+                        <Briefcase className="h-4 w-4 shrink-0" />
                         <span className="truncate">TPO / Admin</span>
                       </button>
 
                       <button
                         type="button"
                         onClick={() => setSelectedRole("faculty")}
-                        className={`flex items-center justify-center gap-1.5 py-2 px-1 rounded-lg text-[12px] font-bold transition cursor-pointer ${
+                        className={`flex items-center justify-center gap-1.5 py-2 px-1 rounded-xl text-[12px] transition cursor-pointer ${
                           selectedRole === "faculty"
-                            ? "bg-[linear-gradient(180deg,hsl(176_52%_46%/0.35),hsl(178_58%_29%/0.35))] text-[hsl(176_52%_66%)] border border-[hsl(176_52%_45%/0.5)] shadow-sm"
-                            : "text-slate-400 hover:text-slate-200 hover:bg-white/[0.02]"
+                            ? "bg-[#1769ff] text-white font-bold shadow-sm"
+                            : "text-[#475569] font-normal hover:text-slate-900"
                         }`}
                       >
-                        <Users className="h-3.5 w-3.5 shrink-0" />
+                        <Users className="h-4 w-4 shrink-0" />
                         <span className="truncate">Faculty</span>
                       </button>
                     </div>
 
                     {/* Role Context Hint */}
-                    <p className="mt-2 text-center text-[11px] font-medium text-slate-400">
+                    <p className="mt-2 text-center text-[11px] font-medium text-slate-500">
                       {selectedRole === "student" && "🎓 Student Placement & AI Mock Interview Lab"}
                       {selectedRole === "tpo" && "🏢 Placement Cell, Deans & Campus Directors"}
                       {selectedRole === "faculty" && "👥 Department Coordinators & Faculty Evaluators"}
@@ -1248,7 +1225,7 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                     <div>
                       <label
                         htmlFor="register-fullname"
-                        className="mb-1.5 flex items-center justify-between text-[12px] font-bold text-slate-300"
+                        className="mb-1.5 flex items-center justify-between text-[12px] font-semibold text-[#1e293b]"
                       >
                         Full Name
                       </label>
@@ -1259,16 +1236,16 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                         onChange={(e) => setFullName(e.target.value)}
                         placeholder="e.g. Nikita Sonawane"
                         required
-                        className="h-11 rounded-xl border-white/10 bg-[#0F1720]/80 text-slate-100 placeholder:text-slate-600 hover:border-white/20 focus:border-[hsl(176_52%_50%/0.6)]"
+                        className="h-10 rounded-xl border-[#e2e8f0] bg-[#f8fafc] text-slate-900 placeholder:text-[#94a3b8] shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus-visible:border-[#1769ff] focus-visible:ring-[#1769ff]/20 text-[13px]"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="register-email"
-                        className="mb-1.5 flex items-center justify-between text-[12px] font-bold text-slate-300"
+                        className="mb-1.5 flex items-center justify-between text-[12px] font-semibold text-[#1e293b]"
                       >
                         Student Email
-                        <span className="flex items-center gap-1 text-[10.5px] font-semibold text-slate-500">
+                        <span className="flex items-center gap-1 text-[10.5px] font-medium text-[#1769ff]">
                           <Mail className="h-3 w-3" /> @{tenantBranding?.code?.toLowerCase() || "campus"}.ac.in
                         </span>
                       </label>
@@ -1279,13 +1256,13 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder={`e.g. student@${tenantBranding?.code?.toLowerCase() || "campus"}.ac.in`}
                         required
-                        className="h-11 rounded-xl border-white/10 bg-[#0F1720]/80 text-slate-100 placeholder:text-slate-600 hover:border-white/20 focus:border-[hsl(176_52%_50%/0.6)]"
+                        className="h-10 rounded-xl border-[#e2e8f0] bg-[#f8fafc] text-slate-900 placeholder:text-[#94a3b8] shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus-visible:border-[#1769ff] focus-visible:ring-[#1769ff]/20 text-[13px]"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="register-password"
-                        className="mb-1.5 flex items-center justify-between text-[12px] font-bold text-slate-300"
+                        className="mb-1.5 flex items-center justify-between text-[12px] font-semibold text-[#1e293b]"
                       >
                         Password (min 6 characters)
                       </label>
@@ -1298,13 +1275,13 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                           placeholder="••••••••••••"
                           required
                           minLength={6}
-                          className="h-11 rounded-xl border-white/10 bg-[#0F1720]/80 font-mono text-slate-100 placeholder:text-slate-600 hover:border-white/20 focus:border-[hsl(176_52%_50%/0.6)] pr-11"
+                          className="h-10 rounded-xl border-[#e2e8f0] bg-[#f8fafc] font-mono text-slate-900 placeholder:text-[#94a3b8] shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus-visible:border-[#1769ff] focus-visible:ring-[#1769ff]/20 pr-11 text-[13px]"
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
                           tabIndex={-1}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors p-1"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94a3b8] hover:text-slate-600 transition-colors p-1"
                           title={showPassword ? "Hide password" : "Show password"}
                         >
                           {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -1314,7 +1291,7 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                     <div>
                       <label
                         htmlFor="register-confirm-password"
-                        className="mb-1.5 flex items-center justify-between text-[12px] font-bold text-slate-300"
+                        className="mb-1.5 flex items-center justify-between text-[12px] font-semibold text-[#1e293b]"
                       >
                         Confirm Password
                       </label>
@@ -1326,14 +1303,14 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                         placeholder="••••••••••••"
                         required
                         minLength={6}
-                        className="h-11 rounded-xl border-white/10 bg-[#0F1720]/80 font-mono text-slate-100 placeholder:text-slate-600 hover:border-white/20 focus:border-[hsl(176_52%_50%/0.6)]"
+                        className="h-10 rounded-xl border-[#e2e8f0] bg-[#f8fafc] font-mono text-slate-900 placeholder:text-[#94a3b8] shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus-visible:border-[#1769ff] focus-visible:ring-[#1769ff]/20 text-[13px]"
                       />
                     </div>
 
                     <Button
                       type="submit"
                       disabled={submitting}
-                      className="group h-12 w-full rounded-xl bg-[linear-gradient(180deg,hsl(176_52%_46%),hsl(178_58%_29%))] text-[15px] font-bold text-white shadow-[0_16px_36px_-12px_hsl(176_52%_44%/0.9),inset_0_1px_0_hsl(0_0%_100%/0.3)] hover:-translate-y-0.5 hover:brightness-110 cursor-pointer"
+                      className="group h-11 w-full rounded-xl bg-[#1769ff] text-[14px] font-semibold text-white shadow-[0_10px_24px_-8px_rgba(23,105,255,0.55)] hover:bg-[#0f5fe8] cursor-pointer"
                     >
                       {submitting ? (
                         <>
@@ -1352,16 +1329,14 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                     <div>
                       <label
                         htmlFor="login-email"
-                        className="mb-1.5 flex items-center justify-between text-[12px] font-bold text-slate-300"
+                        className="mb-1.5 flex items-center justify-between text-[12px] font-semibold text-[#1e293b]"
                       >
                         {isPlatformAdminMode
                           ? "Administrator email"
-                          : selectedRole === "student"
-                          ? "College Student Email / USN"
                           : selectedRole === "faculty"
                           ? "Faculty Coordinator Email"
-                          : "Placement Officer / TPO Email"}
-                        <span className="flex items-center gap-1 text-[10.5px] font-semibold text-slate-500">
+                          : "College Student Email"}
+                        <span className="flex items-center gap-1 text-[10.5px] font-light text-[#1769ff]">
                           <Mail className="h-3 w-3" /> @{isPlatformAdminMode ? "aivicampus.com" : `${tenantBranding?.code?.toLowerCase() || "campus"}.ac.in`}
                         </span>
                       </label>
@@ -1373,29 +1348,29 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                         placeholder={
                           isPlatformAdminMode
                             ? "staging.admin@aivicampus.com"
-                            : selectedRole === "student"
-                            ? `e.g. student@${tenantBranding?.code?.toLowerCase() || "campus"}.ac.in`
+                            : selectedRole === "tpo"
+                            ? `e.g. director.tpo@${tenantBranding?.code?.toLowerCase() || "campus"}.ac.in`
                             : selectedRole === "faculty"
                             ? `e.g. faculty.cse@${tenantBranding?.code?.toLowerCase() || "campus"}.ac.in`
-                            : `e.g. ${(tenantBranding as any)?.adminEmail || `director.tpo@${tenantBranding?.code?.toLowerCase() || "campus"}.ac.in`}`
+                            : `e.g. student@${tenantBranding?.code?.toLowerCase() || "campus"}.ac.in`
                         }
                         required
-                        className="h-11 rounded-xl border-white/10 bg-[#0F1720]/80 text-slate-100 placeholder:text-slate-600 hover:border-white/20 focus:border-[hsl(176_52%_50%/0.6)]"
+                        className="h-10 rounded-xl border-[#e2e8f0] bg-[#f8fafc] text-slate-900 placeholder:text-[#94a3b8] shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus-visible:border-[#1769ff] focus-visible:ring-[#1769ff]/20 text-[13px]"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="login-password"
-                        className="mb-1.5 flex items-center justify-between text-[12px] font-bold text-slate-300"
+                        className="mb-1.5 flex items-center justify-between text-[12px] font-semibold text-[#1e293b]"
                       >
                         Password
                         <button
                           type="button"
                           onClick={handleForgotPassword}
                           disabled={submitting}
-                          className="flex items-center gap-1 text-[10.5px] font-semibold text-[hsl(176_52%_60%)] hover:underline disabled:opacity-50 cursor-pointer"
+                          className="flex items-center gap-1 text-[12px] font-light text-[#1769ff] hover:underline disabled:opacity-50 cursor-pointer"
                         >
-                          <KeyRound className="h-3 w-3" /> Forgot?
+                          <KeyRound className="h-3 w-3" /> Forgot Password?
                         </button>
                       </label>
                       <div className="relative">
@@ -1404,15 +1379,15 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                           type={showPassword ? "text" : "password"}
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          placeholder="••••••••••••"
+                          placeholder="•••••••••"
                           required
-                          className="h-11 rounded-xl border-white/10 bg-[#0F1720]/80 font-mono text-slate-100 placeholder:text-slate-600 hover:border-white/20 focus:border-[hsl(176_52%_50%/0.6)] pr-11"
+                          className="h-10 rounded-xl border-[#e2e8f0] bg-[#f8fafc] font-mono text-slate-900 placeholder:text-[#94a3b8] shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus-visible:border-[#1769ff] focus-visible:ring-[#1769ff]/20 pr-11 text-[13px]"
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
                           tabIndex={-1}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors p-1"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94a3b8] hover:text-slate-600 transition-colors p-1"
                           title={showPassword ? "Hide password" : "Show password"}
                         >
                           {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -1423,7 +1398,7 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                     <Button
                       type="submit"
                       disabled={submitting}
-                      className="group h-12 w-full rounded-xl bg-[linear-gradient(180deg,hsl(176_52%_46%),hsl(178_58%_29%))] text-[15px] font-bold text-white shadow-[0_16px_36px_-12px_hsl(176_52%_44%/0.9),inset_0_1px_0_hsl(0_0%_100%/0.3)] hover:-translate-y-0.5 hover:brightness-110"
+                      className="group h-11 w-full rounded-xl bg-[#1769ff] text-[14px] font-semibold text-white shadow-[0_10px_24px_-8px_rgba(23,105,255,0.55)] hover:bg-[#0f5fe8] cursor-pointer"
                     >
                       {submitting ? (
                         <>
@@ -1447,10 +1422,10 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
 
                 <div className="relative my-4">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-white/[0.08]" />
+                    <div className="w-full border-t border-[#e2e8f0]" />
                   </div>
                   <div className="relative flex justify-center">
-                    <span className="bg-[#101820] px-3 text-[10.5px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                    <span className="bg-white px-3 text-[10.5px] font-bold uppercase tracking-[0.16em] text-[#94a3b8]">
                       or
                     </span>
                   </div>
@@ -1461,7 +1436,7 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                   type="button"
                   onClick={handleGoogleLogin}
                   disabled={submitting}
-                  className="h-11 w-full rounded-xl border-white/12 bg-white/[0.03] text-[13.5px] font-bold text-slate-200 hover:bg-white/[0.08] hover:text-white"
+                  className="h-11 w-full rounded-xl border-[#e2e8f0] bg-white text-[13.5px] font-bold text-slate-700 shadow-[0_1px_2px_rgba(0,0,0,0.05)] hover:bg-slate-50 hover:text-slate-900"
                 >
                   <svg viewBox="0 0 24 24" className="h-4.5 w-4.5 mr-2">
                     <path
@@ -1486,7 +1461,7 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
 
                 {!isGenericGateway && !isPlatformAdminMode && authMode === "login" && (
                   <div className="mt-4 text-center">
-                    <p className="text-[12.5px] text-slate-400">
+                    <p className="text-[12.5px] text-slate-500">
                       New student at {name}?{" "}
                       <button
                         type="button"
@@ -1497,7 +1472,7 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                             navigate(`/campus/register/${tenantCode}`);
                           }
                         }}
-                        className="font-bold text-[hsl(176_52%_62%)] hover:underline cursor-pointer"
+                        className="font-bold text-[#1769ff] hover:underline cursor-pointer"
                       >
                         Create Student Account →
                       </button>
@@ -1507,7 +1482,7 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
 
                 {authMode === "register" && (
                   <div className="mt-4 text-center">
-                    <p className="text-[12.5px] text-slate-400">
+                    <p className="text-[12.5px] text-slate-500">
                       Already registered?{" "}
                       <button
                         type="button"
@@ -1517,7 +1492,7 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                             navigate(`/campus/login/${tenantCode}`);
                           }
                         }}
-                        className="font-bold text-[hsl(176_52%_62%)] hover:underline cursor-pointer"
+                        className="font-bold text-[#1769ff] hover:underline cursor-pointer"
                       >
                         Sign in to your account →
                       </button>
@@ -1527,20 +1502,22 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
 
                 {/* campus code selector */}
                 {!isGenericGateway && (
-                  <div className="relative mt-5 rounded-2xl border border-white/[0.07] bg-[#0F1720]/50 p-4">
-                    <p className="flex items-center justify-between text-[11.5px] font-bold text-slate-400">
-                      Have a specific campus code?
-                      <span className="rounded bg-[hsl(176_52%_45%/0.1)] px-1.5 py-0.5 font-mono text-[9.5px] font-bold text-[hsl(176_52%_60%)]">
+                  <div className="relative mt-5">
+                    <div className="mb-1.5 flex items-center justify-between">
+                      <p className="text-[12px] font-semibold text-[#1e293b]">
+                        Have a specific campus code?
+                      </p>
+                      <span className="text-[10px] font-light text-[#1769ff]">
                         e.g. your-college
                       </span>
-                    </p>
-                    <div className="mt-2.5 flex gap-2">
+                    </div>
+                    <div className="flex gap-2">
                       <Input
                         value={campusCodeInput}
                         onChange={(e) => setCampusCodeInput(e.target.value.toLowerCase().trim())}
-                        placeholder="Enter code"
+                        placeholder="sunrise-institute"
                         disabled={isValidatingCode}
-                        className="h-9 flex-1 rounded-lg border-white/10 bg-[#101820] font-mono text-[12px] text-slate-200 placeholder:text-slate-600"
+                        className="h-10 flex-1 rounded-xl border-[#e2e8f0] bg-[#f8fafc] font-mono text-[12px] text-slate-900 placeholder:text-[#94a3b8] shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus-visible:border-[#1769ff] focus-visible:ring-[#1769ff]/20"
                       />
                       <Button
                         type="button"
@@ -1566,9 +1543,9 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                             setIsValidatingCode(false);
                           }
                         }}
-                        className="h-9 rounded-lg px-4 text-[12px]"
+                        className="h-10 rounded-xl px-4 text-[14px] font-semibold bg-[#1769ff] hover:bg-[#0f5fe8] text-white"
                       >
-                        {isValidatingCode ? <RefreshCw className="h-3 w-3 animate-spin" /> : <>Go <ArrowRight className="h-3 w-3 ml-1" /></>}
+                        {isValidatingCode ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : <>Enter <ArrowRight className="h-3.5 w-3.5 ml-1" /></>}
                       </Button>
                     </div>
                   </div>
@@ -1578,10 +1555,10 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                   <>
                     <div className="relative my-4">
                       <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-white/[0.08]" />
+                        <div className="w-full border-t border-[#e2e8f0]" />
                       </div>
                       <div className="relative flex justify-center">
-                        <span className="bg-[#101820] px-3 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                        <span className="bg-white px-3 text-[12px] font-semibold text-[#94a3b8]">
                           platform administration
                         </span>
                       </div>
@@ -1590,31 +1567,19 @@ export default function BrandedLogin({ defaultMode = "login" }: { defaultMode?: 
                     <button
                       type="button"
                       onClick={() => setIsPlatformAdminMode(true)}
-                      className="w-full flex items-center justify-center gap-1.5 text-[12px] font-semibold text-slate-400 hover:text-white transition py-1.5 cursor-pointer rounded-lg hover:bg-white/[0.04]"
+                      className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-[#1769ff] bg-white text-[14px] font-semibold text-[#1769ff] transition hover:bg-[#eff6ff] cursor-pointer"
                     >
-                      <Lock className="h-3.5 w-3.5 text-[hsl(176_52%_55%)]" /> Platform Master Admin Sign In
+                      <Lock className="h-4 w-4" /> Master Admin Sign In
                     </button>
                   </>
                 )}
               </div>
             )}
 
-            <div className="relative mt-5 flex items-center justify-between text-[11.5px] font-semibold">
-              <Link
-                to="/#demo"
-                className="flex items-center gap-1 text-slate-400 transition hover:text-[hsl(176_52%_60%)]"
-              >
-                <Sparkles className="h-3.5 w-3.5 text-[hsl(176_52%_55%)]" /> Book a college demo
-              </Link>
-              <span className="flex items-center gap-1 text-slate-600">
-                <ShieldCheck className="h-3.5 w-3.5 text-emerald-500/80" /> DPDP · India-hosted
-              </span>
-            </div>
-          </div>
-
-          <div className="mt-5 flex items-center justify-center gap-2 text-center text-[11px] font-semibold text-slate-600">
-            <Check className="h-3.5 w-3.5 text-emerald-500/70" />
-            Powered by AIVI Campus Intelligence OS — AIVI Intelligence Private Limited
+            {/* Figma footer attribution */}
+            <p className="mt-8 text-center text-[12px] text-[#94a3b8]">
+              Powered by AIVI Campus Intelligence OS — AIVI Intelligence Private Limited
+            </p>
           </div>
         </motion.div>
       </div>
